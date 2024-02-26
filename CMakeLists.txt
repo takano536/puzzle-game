@@ -23,6 +23,8 @@ add_executable(
     src/InputMonitor/InputMonitor.cpp
     src/Looper/Looper.cpp
     src/Object/Player/Player.cpp
+    src/Object/Wall/Wall.cpp
+    src/Object/Wall/WallManager/WallManager.cpp
     src/Scene/AbstractScene/AbstractScene.cpp
     src/Scene/GameScene/GameScene.cpp
     src/Scene/Parameter/Parameter.cpp

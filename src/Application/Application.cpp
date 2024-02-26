@@ -12,10 +12,8 @@ Application::Application()
       renderer(nullptr, SDL_DestroyRenderer),
       font(nullptr, TTF_CloseFont),
       surface(nullptr, SDL_FreeSurface),
-      texture(nullptr, SDL_DestroyTexture) {
-
-    event = SDL_Event();
-    is_running = true;
+      texture(nullptr, SDL_DestroyTexture),
+      bg_color(Define::WHITE) {
 }
 
 /**
@@ -65,7 +63,6 @@ int Application::init() {
         ERR("Renderer could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
         return Define::ERROR;
     }
-    SDL_SetRenderDrawColor(renderer.get(), Define::BLACK.r, Define::BLACK.g, Define::BLACK.b, Define::BLACK.a);
 
     // サーフェスの作成
     surface = std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>(
@@ -118,6 +115,6 @@ void Application::run() {
  * @brief アプリケーションの終了判定
  * @return 終了する場合はtrue, それ以外はfalse
  */
-bool Application::should_quit() const {
+bool Application::is_running() const {
     return InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_ESCAPE) > 0;
 }

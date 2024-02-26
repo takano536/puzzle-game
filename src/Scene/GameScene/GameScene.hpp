@@ -20,9 +20,9 @@ class GameScene : public AbstractScene {
     void update() override;
     void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const override;
 
-    const static std::string PARAM_KEY_LEVEL;
+    static const std::string PARAM_KEY_LEVEL;
 
   private:
     int level;
-    std::shared_ptr<Player> player;
+    std::unique_ptr<Player> player;
 };

@@ -1,5 +1,7 @@
 #include <SDL2/SDL.h>
 
+#include <string>
+
 #include "Application/Application.hpp"
 
 int SDL_main(int argc, char *argv[]) {
@@ -15,7 +17,7 @@ int SDL_main(int argc, char *argv[]) {
         return -1;
     }
 
-    while (!app.should_quit()) {
+    while (!app.is_running()) {
         app.run();
     }
 

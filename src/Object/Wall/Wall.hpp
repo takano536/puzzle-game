@@ -1,16 +1,17 @@
 #pragma once
 
+#include <SDL2/SDL.h>
+
 #include "../Object.hpp"
 
-class Player : public Object {
+class Wall : public Object {
   public:
-    Player();
-    virtual ~Player() = default;
+    Wall(SDL_Point coord);
+    virtual ~Wall() = default;
     void update() override;
     void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const override;
 
   private:
-    void move();
-    SDL_FRect rect;
+    SDL_Rect rect;
     SDL_Color color;
 };

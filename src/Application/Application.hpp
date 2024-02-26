@@ -19,7 +19,7 @@ class Application final {
     int init();
     void deinit() const;
     void run();
-    bool should_quit() const;
+    bool is_running() const;
 
   private:
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window;
@@ -29,7 +29,7 @@ class Application final {
     std::unique_ptr<TTF_Font, decltype(&TTF_CloseFont)> font;
     SDL_Event event;
 
-    Looper looper;
+    SDL_Color bg_color;
 
-    bool is_running;
+    Looper looper;
 };

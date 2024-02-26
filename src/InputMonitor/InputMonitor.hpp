@@ -11,7 +11,7 @@ class InputMonitor : public Singleton<InputMonitor> {
     friend Singleton<InputMonitor>;
 
   public:
-    int update();
+    void update();
     int get_pressing_frame_cnt(const SDL_Keycode &key);
     int get_releasing_frame_cnt(const SDL_Keycode &key);
 

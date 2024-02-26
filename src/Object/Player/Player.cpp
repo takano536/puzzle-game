@@ -8,14 +8,16 @@
 #include "../../Define/Define.hpp"
 #include "../../InputMonitor/InputMonitor.hpp"
 
-const static int SPEED = 5;
-const static std::map<Define::DIRECTION, std::vector<SDL_KeyCode>> KEY_MAPS = {
+static const int SIZE = 20;
+static const int SPEED = 5;
+
+static const std::map<Define::DIRECTION, std::vector<SDL_KeyCode>> KEY_MAPS = {
     {Define::DIRECTION::UP, {SDLK_w, SDLK_UP}},
     {Define::DIRECTION::RIGHT, {SDLK_d, SDLK_RIGHT}},
     {Define::DIRECTION::DOWN, {SDLK_s, SDLK_DOWN}},
     {Define::DIRECTION::LEFT, {SDLK_a, SDLK_LEFT}},
 };
-const static std::map<Define::DIRECTION, SDL_Point> VECS = {
+static const std::map<Define::DIRECTION, SDL_Point> VECS = {
     {Define::DIRECTION::UP, {0, -SPEED}},
     {Define::DIRECTION::RIGHT, {SPEED, 0}},
     {Define::DIRECTION::DOWN, {0, SPEED}},
@@ -25,8 +27,8 @@ const static std::map<Define::DIRECTION, SDL_Point> VECS = {
 /**
  * @brief プレイヤーのコンストラクタ
  */
-Player::Player() {
-    rect = {100.f, 100.f, 25.f, 25.f};
+Player::Player()
+    : rect({0, 0, SIZE, SIZE}), color(Define::BLUE) {
 }
 
 /**
@@ -40,7 +42,7 @@ void Player::update() {
  * @brief プレイヤーの描画
  */
 void Player::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
-    SDL_SetRenderDrawColor(renderer, Define::BLUE.r, Define::BLUE.g, Define::BLUE.b, Define::BLUE.a);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRectF(renderer, &rect);
 }
 

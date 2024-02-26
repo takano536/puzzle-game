@@ -49,7 +49,6 @@ void TitleScene::update() {
 void TitleScene::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
     surface = TTF_RenderUTF8_Blended(font, "Title", Define::WHITE);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
-
     SDL_Rect rect = {0, 0, surface->w, surface->h};
     SDL_Rect dst = {0, 0, surface->w, surface->h};
     SDL_RenderCopy(renderer, texture, &rect, &dst);

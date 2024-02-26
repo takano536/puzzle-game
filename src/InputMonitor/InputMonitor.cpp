@@ -3,21 +3,32 @@
 #include <SDL2/SDL.h>
 
 #include <limits>
-#include <set>
 #include <string>
+#include <vector>
 
 /**
  * @brief 押されたボタンを検知して、フレーム数を更新する
  */
-int InputMonitor::update() {
-    std::set<SDL_Keycode> pressing_keys, releasing_keys;
+void InputMonitor::update() {
+    for (auto &[input, frame_cnt] : pressing_frame_cnts) {
+        if (frame_cnt > 0) {
+            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
+        }
+    }
+    for (auto &[input, frame_cnt] : releasing_frame_cnts) {
+        if (frame_cnt > 0) {
+            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
+        }
+    }
+
+    std::vector<SDL_Keycode> pressing_keys, releasing_keys;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_KEYDOWN:
-                pressing_keys.insert(event.key.keysym.sym);
+                pressing_keys.push_back(event.key.keysym.sym);
                 break;
             case SDL_KEYUP:
-                releasing_keys.insert(event.key.keysym.sym);
+                releasing_keys.push_back(event.key.keysym.sym);
                 break;
             default:
                 break;
@@ -38,17 +49,6 @@ int InputMonitor::update() {
             releasing_frame_cnts[input] = 1;
         }
     }
-    for (auto &[input, frame_cnt] : pressing_frame_cnts) {
-        if (frame_cnt > 0) {
-            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
-        }
-    }
-    for (auto &[input, frame_cnt] : releasing_frame_cnts) {
-        if (frame_cnt > 0) {
-            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
-        }
-    }
-    return 0;
 }
 
 /**

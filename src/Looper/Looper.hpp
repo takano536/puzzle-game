@@ -26,4 +26,5 @@ class Looper final : public IOnChangedListener {
   private:
     std::stack<std::shared_ptr<AbstractScene>> scenes;
     FpsKeeper fps_keeper;
+    bool should_show_fps;
 };

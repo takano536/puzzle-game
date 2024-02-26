@@ -12,14 +12,15 @@
  * @brief コンストラクタ
  * @details タイトルシーンをスタックに積む
  */
-Looper::Looper() {
+Looper::Looper()
+    : should_show_fps(false) {
+
     Parameter params;
     scenes.push(std::make_shared<TitleScene>(this, params));
 }
 
 /**
  * @brief メインループ
- * @param event SDL_Event
  * @param renderer SDL_Renderer
  * @param surface SDL_Surface
  * @param texture SDL_Texture
@@ -42,7 +43,10 @@ int Looper::loop(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *text
 
     fps_keeper.wait();
 
-    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_f) > 0) {
+    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_f) == 1) {
+        should_show_fps = !should_show_fps;
+    }
+    if (should_show_fps) {
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "FPS: %f", fps_keeper.get_fps());
     }
 
