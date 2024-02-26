@@ -6,7 +6,12 @@
  * @brief アプリケーションのコンストラクタ
  */
 Application::Application()
-    : window(nullptr, SDL_DestroyWindow), renderer(nullptr, SDL_DestroyRenderer) {
+    : window(nullptr, SDL_DestroyWindow),
+      renderer(nullptr, SDL_DestroyRenderer),
+      font(nullptr, TTF_CloseFont),
+      surface(nullptr, SDL_FreeSurface),
+      texture(nullptr, SDL_DestroyTexture) {
+
     event = SDL_Event();
     is_running = true;
 }
@@ -18,7 +23,13 @@ Application::Application()
 int Application::init() {
     // SDLの初期化
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("SDLの初期化に失敗しました: %s", SDL_GetError());
+        SDL_Log("SDL could not initialize... SDL_Error: %s", SDL_GetError());
+        return Define::ERROR;
+    }
+
+    // TTFの初期化
+    if (TTF_Init() != 0) {
+        SDL_Log("TTF could not initialize... TTF_Error: %s", TTF_GetError());
         return Define::ERROR;
     }
 
@@ -35,7 +46,7 @@ int Application::init() {
         SDL_DestroyWindow
     );
     if (window == nullptr) {
-        SDL_Log("ウィンドウの作成に失敗しました: %s", SDL_GetError());
+        SDL_Log("Window could not be created... SDL_Error: %s", SDL_GetError());
         return Define::ERROR;
     }
 
@@ -49,10 +60,40 @@ int Application::init() {
         SDL_DestroyRenderer
     );
     if (renderer == nullptr) {
-        SDL_Log("レンダラの作成に失敗しました: %s", SDL_GetError());
+        SDL_Log("Renderer could not be created... SDL_Error: %s", SDL_GetError());
         return Define::ERROR;
     }
     SDL_SetRenderDrawColor(renderer.get(), Define::BG_R, Define::BG_G, Define::BG_B, Define::BG_A);
+
+    // サーフェスの作成
+    surface = std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>(
+        SDL_CreateRGBSurface(0, Define::WIN_W, Define::WIN_H, 32, 0, 0, 0, 0),
+        SDL_FreeSurface
+    );
+    if (surface == nullptr) {
+        SDL_Log("Surface could not be created... SDL_Error: %s", SDL_GetError());
+        return Define::ERROR;
+    }
+
+    // テクスチャの作成
+    texture = std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>(
+        SDL_CreateTextureFromSurface(renderer.get(), surface.get()),
+        SDL_DestroyTexture
+    );
+    if (texture == nullptr) {
+        SDL_Log("Texture could not be created... SDL_Error: %s", SDL_GetError());
+        return Define::ERROR;
+    }
+
+    // フォントの作成
+    font = std::unique_ptr<TTF_Font, decltype(&TTF_CloseFont)>(
+        TTF_OpenFont(Define::FONT_PATH.c_str(), Define::FONT_SIZE),
+        TTF_CloseFont
+    );
+    if (font == nullptr) {
+        SDL_Log("Font could not be created... TTF_Error: %s", TTF_GetError());
+        return Define::ERROR;
+    }
 
     return Define::SUCCESS;
 }
@@ -68,19 +109,29 @@ void Application::deinit() const {
  * @brief アプリケーションのメインループ
  */
 void Application::run() {
+    bool is_input = false;
+
+    SDL_RenderClear(renderer.get());
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
                 is_running = false;
                 break;
             case SDL_KEYDOWN:
-                is_running = false;
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    is_running = false;
+                }
+                is_input = true;
+                SDL_Log("key: %s", SDL_GetKeyName(event.key.keysym.sym));
                 break;
             default:
                 break;
         }
+        if (is_input) {
+            break;
+        }
     }
-    looper.loop(window.get(), renderer.get());
+    looper.loop(event, renderer.get(), surface.get(), texture.get(), font.get());
     SDL_RenderPresent(renderer.get());
 }
 

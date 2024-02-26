@@ -5,13 +5,20 @@
 
 #include "../AbstractScene/AbstractScene.hpp"
 
+#include <string>
+
 /**
- * @brief タイトルシーン
+ * @brief ゲームシーン
  */
-class TitleScene : public AbstractScene {
+class GameScene : public AbstractScene {
   public:
-    TitleScene(IOnChangedListener *listener, const Parameter &params);
-    ~TitleScene() = default;
+    GameScene(IOnChangedListener *listener, const Parameter &params);
+    ~GameScene() = default;
     void update(const SDL_Event &event) override;
     void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const override;
+
+    const static std::string PARAM_KEY_LEVEL;
+
+  private:
+    int level;
 };

@@ -1,7 +1,9 @@
 #include "Looper.hpp"
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
+#include "../Define/Define.hpp"
+#include "../Scene/GameScene/GameScene.hpp"
 #include "../Scene/TitleScene/TitleScene.hpp"
 
 /**
@@ -9,37 +11,50 @@
  * @details タイトルシーンをスタックに積む
  */
 Looper::Looper() {
-    scenes.push(std::make_shared<TitleScene>(this, Parameter()));
+    Parameter params;
+    scenes.push(std::make_shared<TitleScene>(this, params));
 }
 
 /**
  * @brief メインループ
- * @param window SDL_Window
+ * @param event SDL_Event
  * @param renderer SDL_Renderer
+ * @param surface SDL_Surface
+ * @param texture SDL_Texture
+ * @param font TTF_Font
+ * @return 成功した場合は0, 失敗した場合は-1
  * @details　シーンスタックの一番上のシーンを更新し、描画する
  */
-void Looper::loop(SDL_Window *window, SDL_Renderer *renderer) const {
+int Looper::loop(const SDL_Event &event, SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
     if (scenes.empty()) {
-        return;
+        return Define::ERROR;
     }
-    scenes.top()->update();
-    scenes.top()->draw(renderer);
+    scenes.top()->update(event);
+    scenes.top()->draw(renderer, surface, texture, font);
+    return Define::SUCCESS;
 }
 
 /**
  * @brief シーン変更時の処理
  * @param scene_type 変更するシーンの種類
- * @param param 前のシーンから引き継ぐパラメータ
+ * @param params 前のシーンから引き継ぐパラメータ
  * @param should_clear_stuck シーンスタックをクリアするかどうか
  */
-void Looper::on_changed(const SceneType scene_type, const Parameter &param, const bool should_clear_stuck) {
+void Looper::on_changed(const SceneType scene_type, const Parameter &params, const bool should_clear_stuck) {
     if (should_clear_stuck) {
-        scenes = std::stack<std::shared_ptr<AbstractScene>>();
+        while (!scenes.empty()) {
+            scenes.pop();
+        }
     }
 
     switch (scene_type) {
         case SceneType::Title:
-            scenes.push(std::make_shared<TitleScene>(this, param));
+            scenes.push(std::make_shared<TitleScene>(this, params));
+            SDL_Log("TitleScene");
+            break;
+        case SceneType::Game:
+            scenes.push(std::make_shared<GameScene>(this, params));
+            SDL_Log("GameScene");
             break;
         default:
             break;

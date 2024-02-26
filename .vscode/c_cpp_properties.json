@@ -3,7 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "${env:USERPROFILE}\\.local\\include\\SDL2"
+                "${env:USERPROFILE}\\.local\\include"
             ],
             "defines": [
                 "_DEBUG",

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <memory>
 
@@ -14,14 +15,12 @@ class IOnChangedListener;
  */
 class AbstractScene {
   public:
-    AbstractScene(IOnChangedListener *listener, const Parameter &param);
+    AbstractScene(IOnChangedListener *listener, const Parameter &params);
     virtual ~AbstractScene() = default;
 
-    virtual void update() = 0;
-    virtual void draw(SDL_Renderer *renderer) const = 0;
-    virtual void on_changed(const IOnChangedListener *listener) = 0;
-    virtual void set_param(const Parameter param) = 0;
+    virtual void update(const SDL_Event &event) = 0;
+    virtual void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const = 0;
 
   protected:
-    std::unique_ptr<IOnChangedListener> listener;
+    IOnChangedListener *listener;
 };

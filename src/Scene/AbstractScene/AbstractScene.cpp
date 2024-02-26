@@ -3,8 +3,8 @@
 /**
  * @brief コンストラクタ
  * @param listener リスナー
- * @param param パラメータ
+ * @param params パラメータ
  */
-AbstractScene::AbstractScene(IOnChangedListener *listener, const Parameter &param)
+AbstractScene::AbstractScene(IOnChangedListener *listener, const Parameter &params)
     : listener(listener) {
 }

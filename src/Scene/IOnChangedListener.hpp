@@ -11,5 +11,5 @@ class IOnChangedListener {
   public:
     IOnChangedListener() = default;
     virtual ~IOnChangedListener() = default;
-    virtual void on_changed(const SceneType scene_type, const Parameter &param, const bool should_clear_stuck) = 0;
+    virtual void on_changed(const SceneType scene_type, const Parameter &params, const bool should_clear_stuck) = 0;
 };

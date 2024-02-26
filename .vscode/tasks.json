@@ -1,0 +1,34 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: Windows CMake Setup (x64-Debug)",
+            "command": "${env:LOCALAPPDATA}\\Local\\Scoop\\shims\\cmake.exe",
+            "args": [
+                "-S",
+                "..",
+                "-B",
+                ".",
+                "-G",
+                "MinGW Makefiles",
+                "-DCMAKE_BUILD_TYPE=Debug",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}\\build"
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: Windows CMake Build",
+            "command": "${env:LOCALAPPDATA}\\Local\\Scoop\\shims\\cmake.exe",
+            "args": [
+                "--build",
+                ".",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}\\build"
+            },
+        }
+    ],
+    "version": "2.0.0"
+}

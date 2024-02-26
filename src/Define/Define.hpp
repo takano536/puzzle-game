@@ -1,4 +1,4 @@
-#pragma onece
+#pragma once
 
 #include <string>
 
@@ -19,4 +19,13 @@ class Define final {
     const static int BG_G;
     const static int BG_B;
     const static int BG_A;
+
+    const static std::string FONT_PATH;
+    const static int FONT_SIZE;
+
+    enum class Level {
+        Easy,
+        Normal,
+        Hard
+    };
 };

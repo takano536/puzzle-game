@@ -1,6 +1,7 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <memory>
 
@@ -21,9 +22,14 @@ class Application final {
     bool should_quit() const;
 
   private:
-    Looper looper;
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window;
     std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> renderer;
+    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> surface;
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> texture;
+    std::unique_ptr<TTF_Font, decltype(&TTF_CloseFont)> font;
     SDL_Event event;
+
+    Looper looper;
+
     bool is_running;
 };
