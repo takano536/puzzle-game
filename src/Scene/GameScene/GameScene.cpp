@@ -17,7 +17,6 @@ GameScene::GameScene(IOnChangedListener *listener, const Parameter &params)
 
 /**
  * @brief 更新
- * @param event イベントパラメータ
  */
 void GameScene::update() {
 }

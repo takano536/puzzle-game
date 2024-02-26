@@ -58,7 +58,10 @@
         "regex": "cpp",
         "sstream": "cpp",
         "cstdarg": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "source_location": "cpp"
     },
     "code-runner.executorMap": {
         "c": "cd $dir && g++ -std=gnu++20 -I$workspaceRoot/ac-library -Wall -Wextra -O2 $fileName -o $fileNameWithoutExt.exe && $dir$fileNameWithoutExt.exe ; rm $dir$fileNameWithoutExt.exe",

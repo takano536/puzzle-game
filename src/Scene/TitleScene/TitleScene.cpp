@@ -15,7 +15,6 @@ TitleScene::TitleScene(IOnChangedListener *listener, const Parameter &params)
 
 /**
  * @brief 更新
- * @param event イベントパラメータ
  */
 void TitleScene::update() {
     Parameter params;

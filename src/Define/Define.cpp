@@ -12,5 +12,5 @@ const int Define::ERROR = -1;
 const SDL_Color Define::BLACK = {33, 33, 33, 255};
 const SDL_Color Define::BLUE = {66, 165, 245, 255};
 
-const std::string Define::FONT_PATH = "../assets/fonts/NotoSansJP-VariableFont_wght.ttf";
+const std::string Define::FONT_PATH = "../assets/fonts/Montserrat-VariableFont_wght.ttf";
 const int Define::FONT_SIZE = 24;

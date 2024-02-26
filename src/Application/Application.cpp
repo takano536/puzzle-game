@@ -2,6 +2,7 @@
 
 #include "../Define/Define.hpp"
 #include "../InputMonitor/InputMonitor.hpp"
+#include "../Utilities/Macros.hpp"
 
 /**
  * @brief アプリケーションのコンストラクタ
@@ -24,13 +25,13 @@ Application::Application()
 int Application::init() {
     // SDLの初期化
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("SDL could not initialize... SDL_Error: %s", SDL_GetError());
+        ERR("SDL could not initialize... SDL_Error: " + std::string(SDL_GetError()));
         return Define::ERROR;
     }
 
     // TTFの初期化
     if (TTF_Init() != 0) {
-        SDL_Log("TTF could not initialize... TTF_Error: %s", TTF_GetError());
+        ERR("TTF could not initialize... TTF_Error: " + std::string(TTF_GetError()));
         return Define::ERROR;
     }
 
@@ -47,7 +48,7 @@ int Application::init() {
         SDL_DestroyWindow
     );
     if (window == nullptr) {
-        SDL_Log("Window could not be created... SDL_Error: %s", SDL_GetError());
+        ERR("Window could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
         return Define::ERROR;
     }
 
@@ -61,7 +62,7 @@ int Application::init() {
         SDL_DestroyRenderer
     );
     if (renderer == nullptr) {
-        SDL_Log("Renderer could not be created... SDL_Error: %s", SDL_GetError());
+        ERR("Renderer could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
         return Define::ERROR;
     }
     SDL_SetRenderDrawColor(renderer.get(), Define::BLACK.r, Define::BLACK.g, Define::BLACK.b, Define::BLACK.a);
@@ -72,7 +73,7 @@ int Application::init() {
         SDL_FreeSurface
     );
     if (surface == nullptr) {
-        SDL_Log("Surface could not be created... SDL_Error: %s", SDL_GetError());
+        ERR("Surface could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
         return Define::ERROR;
     }
 
@@ -82,7 +83,7 @@ int Application::init() {
         SDL_DestroyTexture
     );
     if (texture == nullptr) {
-        SDL_Log("Texture could not be created... SDL_Error: %s", SDL_GetError());
+        ERR("Texture could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
         return Define::ERROR;
     }
 
@@ -92,7 +93,7 @@ int Application::init() {
         TTF_CloseFont
     );
     if (font == nullptr) {
-        SDL_Log("Font could not be created... TTF_Error: %s", TTF_GetError());
+        ERR("Font could not be created... TTF_Error: %s" + std::string(TTF_GetError()));
         return Define::ERROR;
     }
 
