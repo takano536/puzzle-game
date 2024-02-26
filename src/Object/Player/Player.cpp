@@ -2,26 +2,21 @@
 
 #include <SDL2/SDL.h>
 
-#include <map>
+#include <array>
+#include <tuple>
 #include <vector>
 
 #include "../../Define/Define.hpp"
 #include "../../InputMonitor/InputMonitor.hpp"
 
 static const int SIZE = 20;
-static const int SPEED = 5;
+const static int SPEED = 5;
 
-static const std::map<Define::DIRECTION, std::vector<SDL_KeyCode>> KEY_MAPS = {
-    {Define::DIRECTION::UP, {SDLK_w, SDLK_UP}},
-    {Define::DIRECTION::RIGHT, {SDLK_d, SDLK_RIGHT}},
-    {Define::DIRECTION::DOWN, {SDLK_s, SDLK_DOWN}},
-    {Define::DIRECTION::LEFT, {SDLK_a, SDLK_LEFT}},
-};
-static const std::map<Define::DIRECTION, SDL_Point> VECS = {
-    {Define::DIRECTION::UP, {0, -SPEED}},
-    {Define::DIRECTION::RIGHT, {SPEED, 0}},
-    {Define::DIRECTION::DOWN, {0, SPEED}},
-    {Define::DIRECTION::LEFT, {-SPEED, 0}},
+const static std::array<std::tuple<Define::DIRECTION, std::vector<SDL_KeyCode>, SDL_Point>, 4> KEY_MAPS = {
+    std::make_tuple(Define::DIRECTION::UP, std::vector<SDL_KeyCode>{SDLK_w, SDLK_UP}, SDL_Point{0, -SPEED}),
+    std::make_tuple(Define::DIRECTION::RIGHT, std::vector<SDL_KeyCode>{SDLK_d, SDLK_RIGHT}, SDL_Point{SPEED, 0}),
+    std::make_tuple(Define::DIRECTION::DOWN, std::vector<SDL_KeyCode>{SDLK_s, SDLK_DOWN}, SDL_Point{0, SPEED}),
+    std::make_tuple(Define::DIRECTION::LEFT, std::vector<SDL_KeyCode>{SDLK_a, SDLK_LEFT}, SDL_Point{-SPEED, 0}),
 };
 
 /**
@@ -50,18 +45,17 @@ void Player::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *tex
  * @brief プレイヤーの移動
  */
 void Player::move() {
-    SDL_Point vec = {0, 0};
+    SDL_Point moving_vec = {0, 0};
 
-    for (const auto &[direction, keys] : KEY_MAPS) {
+    for (const auto &[direction, keys, vec] : KEY_MAPS) {
         for (const auto &key : keys) {
             if (InputMonitor::get_instance().get_pressing_frame_cnt(key) > 0) {
-                vec.x += VECS.at(direction).x;
-                vec.y += VECS.at(direction).y;
-                break;
+                moving_vec.x += vec.x;
+                moving_vec.y += vec.y;
             }
         }
     }
 
-    rect.x += vec.x;
-    rect.y += vec.y;
+    rect.x += moving_vec.x;
+    rect.y += moving_vec.y;
 }

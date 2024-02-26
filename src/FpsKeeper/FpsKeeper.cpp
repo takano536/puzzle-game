@@ -2,9 +2,9 @@
 
 #include <SDL2/SDL.h>
 
-static const int FPS = 60;                  // FPS
-static const int UPINTVL = FPS;             // UPINTVLフレームごとにFPSを更新
-static const int HISTORIES_SIZE = FPS * 2;  // FPSを計算するための履歴数(2以上)
+const static int FPS = 60;                  // FPS
+const static int UPINTVL = FPS;             // UPINTVLフレームごとにFPSを更新
+const static int HISTORIES_SIZE = FPS * 2;  // FPSを計算するための履歴数(2以上)
 
 FpsKeeper::FpsKeeper()
     : fps(0), frame_cnt(0) {

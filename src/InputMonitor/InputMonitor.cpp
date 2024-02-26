@@ -12,12 +12,12 @@
 void InputMonitor::update() {
     for (auto &[input, frame_cnt] : pressing_frame_cnts) {
         if (frame_cnt > 0) {
-            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
+            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 2 : frame_cnt + 1);
         }
     }
     for (auto &[input, frame_cnt] : releasing_frame_cnts) {
         if (frame_cnt > 0) {
-            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
+            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 2 : frame_cnt + 1);
         }
     }
 
