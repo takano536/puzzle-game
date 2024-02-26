@@ -4,6 +4,12 @@
 #include "../../InputMonitor/InputMonitor.hpp"
 #include "../GameScene/GameScene.hpp"
 
+static const std::map<Define::LEVEL, SDL_KeyCode> KEY_MAPS = {
+    {Define::LEVEL::EASY, SDLK_e},
+    {Define::LEVEL::NORMAL, SDLK_n},
+    {Define::LEVEL::HARD, SDLK_h},
+};
+
 /**
  * @brief コンストラクタ
  * @param listener リスナー
@@ -20,12 +26,12 @@ void TitleScene::update() {
     Parameter params;
     params.set(GameScene::PARAM_KEY_LEVEL, -1);
     bool should_clear_stuck = false;
-    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_e) > 0) {
-        params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Easy));
-    } else if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_n) > 0) {
-        params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Normal));
-    } else if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_h) > 0) {
-        params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Hard));
+
+    for (const auto &[level, key] : KEY_MAPS) {
+        if (InputMonitor::get_instance().get_pressing_frame_cnt(key) > 0) {
+            params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(level));
+            break;
+        }
     }
 
     if (params.get(GameScene::PARAM_KEY_LEVEL) != -1) {

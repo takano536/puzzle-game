@@ -41,7 +41,10 @@ int Looper::loop(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *text
     SDL_RenderPresent(renderer);
 
     fps_keeper.wait();
-    // SDL_Log("FPS: %f", fps_keeper.get_fps());
+
+    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_f) > 0) {
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "FPS: %f", fps_keeper.get_fps());
+    }
 
     return Define::SUCCESS;
 }
@@ -62,11 +65,11 @@ void Looper::on_changed(const SceneType scene_type, const Parameter &params, con
     switch (scene_type) {
         case SceneType::Title:
             scenes.push(std::make_shared<TitleScene>(this, params));
-            SDL_Log("TitleScene");
+            SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "TitleScene");
             break;
         case SceneType::Game:
             scenes.push(std::make_shared<GameScene>(this, params));
-            SDL_Log("GameScene");
+            SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "GameScene");
             break;
         default:
             ERR("Invalid scene type");

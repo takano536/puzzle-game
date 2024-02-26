@@ -24,9 +24,16 @@ class Define final {
     const static std::string FONT_PATH;
     const static int FONT_SIZE;
 
-    enum class Level {
-        Easy,
-        Normal,
-        Hard
+    enum class LEVEL {
+        EASY,
+        NORMAL,
+        HARD
+    };
+
+    enum class DIRECTION {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     };
 };

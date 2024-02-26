@@ -2,10 +2,25 @@
 
 #include <SDL2/SDL.h>
 
+#include <map>
+#include <vector>
+
 #include "../../Define/Define.hpp"
 #include "../../InputMonitor/InputMonitor.hpp"
 
-const static float SPEED = 5;
+const static int SPEED = 5;
+const static std::map<Define::DIRECTION, std::vector<SDL_KeyCode>> KEY_MAPS = {
+    {Define::DIRECTION::UP, {SDLK_w, SDLK_UP}},
+    {Define::DIRECTION::RIGHT, {SDLK_d, SDLK_RIGHT}},
+    {Define::DIRECTION::DOWN, {SDLK_s, SDLK_DOWN}},
+    {Define::DIRECTION::LEFT, {SDLK_a, SDLK_LEFT}},
+};
+const static std::map<Define::DIRECTION, SDL_Point> VECS = {
+    {Define::DIRECTION::UP, {0, -SPEED}},
+    {Define::DIRECTION::RIGHT, {SPEED, 0}},
+    {Define::DIRECTION::DOWN, {0, SPEED}},
+    {Define::DIRECTION::LEFT, {-SPEED, 0}},
+};
 
 /**
  * @brief プレイヤーのコンストラクタ
@@ -33,22 +48,18 @@ void Player::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *tex
  * @brief プレイヤーの移動
  */
 void Player::move() {
-    float vec_x = 0;
-    float vec_y = 0;
+    SDL_Point vec = {0, 0};
 
-    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_LEFT) > 0) {
-        vec_x = -SPEED;
-    }
-    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_RIGHT) > 0) {
-        vec_x = SPEED;
-    }
-    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_UP) > 0) {
-        vec_y = -SPEED;
-    }
-    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_DOWN) > 0) {
-        vec_y = SPEED;
+    for (const auto &[direction, keys] : KEY_MAPS) {
+        for (const auto &key : keys) {
+            if (InputMonitor::get_instance().get_pressing_frame_cnt(key) > 0) {
+                vec.x += VECS.at(direction).x;
+                vec.y += VECS.at(direction).y;
+                break;
+            }
+        }
     }
 
-    rect.x += vec_x;
-    rect.y += vec_y;
+    rect.x += vec.x;
+    rect.y += vec.y;
 }

@@ -2,35 +2,51 @@
 
 #include <SDL2/SDL.h>
 
+#include <limits>
 #include <set>
+#include <string>
 
 /**
  * @brief 押されたボタンを検知して、フレーム数を更新する
  */
 int InputMonitor::update() {
-    std::set<SDL_Keycode> pressing_inputs, releasing_inputs;
+    std::set<SDL_Keycode> pressing_keys, releasing_keys;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_KEYDOWN:
-                SDL_Log("Key Down: %s", SDL_GetKeyName(event.key.keysym.sym));
-                pressing_inputs.insert(event.key.keysym.sym);
+                pressing_keys.insert(event.key.keysym.sym);
                 break;
             case SDL_KEYUP:
-                SDL_Log("Key Up: %s", SDL_GetKeyName(event.key.keysym.sym));
-                releasing_inputs.insert(event.key.keysym.sym);
+                releasing_keys.insert(event.key.keysym.sym);
                 break;
             default:
                 break;
         }
     }
 
-    for (const auto &input : pressing_inputs) {
+    for (const auto &input : pressing_keys) {
         releasing_frame_cnts[input] = 0;
-        pressing_frame_cnts[input]++;
+        if (pressing_frame_cnts[input] == 0) {
+            SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Key Down: %s", SDL_GetKeyName(input));
+            pressing_frame_cnts[input] = 1;
+        }
     }
-    for (const auto &input : releasing_inputs) {
+    for (const auto &input : releasing_keys) {
         pressing_frame_cnts[input] = 0;
-        releasing_frame_cnts[input]++;
+        if (releasing_frame_cnts[input] == 0) {
+            SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Key Up  : %s", SDL_GetKeyName(input));
+            releasing_frame_cnts[input] = 1;
+        }
+    }
+    for (auto &[input, frame_cnt] : pressing_frame_cnts) {
+        if (frame_cnt > 0) {
+            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
+        }
+    }
+    for (auto &[input, frame_cnt] : releasing_frame_cnts) {
+        if (frame_cnt > 0) {
+            frame_cnt = (frame_cnt + 1 == std::numeric_limits<long long int>::max() ? 1 : frame_cnt + 1);
+        }
     }
     return 0;
 }
@@ -56,5 +72,5 @@ int InputMonitor::get_releasing_frame_cnt(const SDL_Keycode &key) {
  * @param key SDL_Keycode
  */
 bool InputMonitor::is_valid_input(const SDL_Keycode &key) const {
-    return SDL_GetKeyName(key) == "" ? false : true;
+    return std::string(SDL_GetKeyName(key)).empty() ? false : true;
 }
