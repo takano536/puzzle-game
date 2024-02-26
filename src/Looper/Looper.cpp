@@ -5,6 +5,7 @@
 #include "../Define/Define.hpp"
 #include "../Scene/GameScene/GameScene.hpp"
 #include "../Scene/TitleScene/TitleScene.hpp"
+#include "../Utilities/Macros.h"
 
 /**
  * @brief コンストラクタ
@@ -25,12 +26,16 @@ Looper::Looper() {
  * @return 成功した場合は0, 失敗した場合は-1
  * @details　シーンスタックの一番上のシーンを更新し、描画する
  */
-int Looper::loop(const SDL_Event &event, SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+int Looper::loop(const SDL_Event &event, SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) {
     if (scenes.empty()) {
-        return Define::ERROR;
+        ERR("Scene stack is empty");
     }
+
     scenes.top()->update(event);
     scenes.top()->draw(renderer, surface, texture, font);
+    fps_keeper.wait();
+    SDL_Log("FPS: %f", fps_keeper.get_fps());
+
     return Define::SUCCESS;
 }
 
@@ -57,6 +62,7 @@ void Looper::on_changed(const SceneType scene_type, const Parameter &params, con
             SDL_Log("GameScene");
             break;
         default:
+            ERR("Invalid scene type");
             break;
     }
 }

@@ -19,11 +19,13 @@ add_executable(
     src/main.cpp
     src/Application/Application.cpp
     src/Define/Define.cpp
+    src/FpsKeeper/FpsKeeper.cpp
     src/Looper/Looper.cpp
     src/Scene/AbstractScene/AbstractScene.cpp
     src/Scene/GameScene/GameScene.cpp
     src/Scene/Parameter/Parameter.cpp
     src/Scene/TitleScene/TitleScene.cpp
+    src/Utilities/ErrorHandler/ErrorHandler.cpp
 )
 
 target_link_libraries(
