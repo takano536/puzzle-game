@@ -3,9 +3,10 @@
 #include <SDL2/SDL.h>
 
 #include "../Define/Define.hpp"
+#include "../InputMonitor/InputMonitor.hpp"
 #include "../Scene/GameScene/GameScene.hpp"
 #include "../Scene/TitleScene/TitleScene.hpp"
-#include "../Utilities/Macros.h"
+#include "../Utilities/Macros.hpp"
 
 /**
  * @brief コンストラクタ
@@ -26,15 +27,20 @@ Looper::Looper() {
  * @return 成功した場合は0, 失敗した場合は-1
  * @details　シーンスタックの一番上のシーンを更新し、描画する
  */
-int Looper::loop(const SDL_Event &event, SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) {
+int Looper::loop(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) {
     if (scenes.empty()) {
         ERR("Scene stack is empty");
     }
 
-    scenes.top()->update(event);
+    InputMonitor::get_instance().update();
+    scenes.top()->update();
+
+    SDL_RenderClear(renderer);
     scenes.top()->draw(renderer, surface, texture, font);
+    SDL_RenderPresent(renderer);
+
     fps_keeper.wait();
-    SDL_Log("FPS: %f", fps_keeper.get_fps());
+    // SDL_Log("FPS: %f", fps_keeper.get_fps());
 
     return Define::SUCCESS;
 }

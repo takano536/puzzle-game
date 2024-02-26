@@ -20,7 +20,7 @@ class Looper final : public IOnChangedListener {
   public:
     Looper();
     ~Looper() = default;
-    int loop(const SDL_Event &event, SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font);
+    int loop(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font);
     void on_changed(const SceneType scene_type, const Parameter &params, const bool should_clear_stuck) override;
 
   private:

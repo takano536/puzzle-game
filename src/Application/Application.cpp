@@ -1,6 +1,7 @@
 #include "Application.hpp"
 
 #include "../Define/Define.hpp"
+#include "../InputMonitor/InputMonitor.hpp"
 
 /**
  * @brief アプリケーションのコンストラクタ
@@ -63,7 +64,7 @@ int Application::init() {
         SDL_Log("Renderer could not be created... SDL_Error: %s", SDL_GetError());
         return Define::ERROR;
     }
-    SDL_SetRenderDrawColor(renderer.get(), Define::BG_R, Define::BG_G, Define::BG_B, Define::BG_A);
+    SDL_SetRenderDrawColor(renderer.get(), Define::BLACK.r, Define::BLACK.g, Define::BLACK.b, Define::BLACK.a);
 
     // サーフェスの作成
     surface = std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>(
@@ -109,30 +110,7 @@ void Application::deinit() const {
  * @brief アプリケーションのメインループ
  */
 void Application::run() {
-    bool is_input = false;
-
-    SDL_RenderClear(renderer.get());
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                is_running = false;
-                break;
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    is_running = false;
-                }
-                is_input = true;
-                SDL_Log("key: %s", SDL_GetKeyName(event.key.keysym.sym));
-                break;
-            default:
-                break;
-        }
-        if (is_input) {
-            break;
-        }
-    }
-    looper.loop(event, renderer.get(), surface.get(), texture.get(), font.get());
-    SDL_RenderPresent(renderer.get());
+    looper.loop(renderer.get(), surface.get(), texture.get(), font.get());
 }
 
 /**
@@ -140,5 +118,5 @@ void Application::run() {
  * @return 終了する場合はtrue, それ以外はfalse
  */
 bool Application::should_quit() const {
-    return !is_running;
+    return InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_ESCAPE) > 0;
 }

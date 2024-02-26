@@ -1,5 +1,7 @@
 #include "GameScene.hpp"
 
+#include "../../Define/Define.hpp"
+
 const std::string GameScene::PARAM_KEY_LEVEL = "PARAM_KEY_LEVEL";
 
 /**
@@ -17,7 +19,7 @@ GameScene::GameScene(IOnChangedListener *listener, const Parameter &params)
  * @brief 更新
  * @param event イベントパラメータ
  */
-void GameScene::update(const SDL_Event &event) {
+void GameScene::update() {
 }
 
 /**
@@ -29,7 +31,7 @@ void GameScene::update(const SDL_Event &event) {
  */
 void GameScene::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
     std::string text = "Game Level: " + std::to_string(level);
-    surface = TTF_RenderUTF8_Blended(font, text.c_str(), {0, 0, 0, 255});
+    surface = TTF_RenderUTF8_Blended(font, text.c_str(), Define::BLUE);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
 
     SDL_Rect rect = {0, 0, surface->w, surface->h};

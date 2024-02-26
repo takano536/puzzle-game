@@ -1,6 +1,7 @@
 #include "TitleScene.hpp"
 
 #include "../../Define/Define.hpp"
+#include "../../InputMonitor/InputMonitor.hpp"
 #include "../GameScene/GameScene.hpp"
 
 /**
@@ -16,34 +17,20 @@ TitleScene::TitleScene(IOnChangedListener *listener, const Parameter &params)
  * @brief 更新
  * @param event イベントパラメータ
  */
-void TitleScene::update(const SDL_Event &event) {
-    if (event.type != SDL_KEYDOWN) {
-        return;
+void TitleScene::update() {
+    Parameter params;
+    params.set(GameScene::PARAM_KEY_LEVEL, -1);
+    bool should_clear_stuck = false;
+    if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_e) > 0) {
+        params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Easy));
+    } else if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_n) > 0) {
+        params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Normal));
+    } else if (InputMonitor::get_instance().get_pressing_frame_cnt(SDLK_h) > 0) {
+        params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Hard));
     }
-    switch (event.key.keysym.sym) {
-        case SDLK_e: {
-            Parameter params;
-            params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Easy));
-            bool should_clear_stuck = false;
-            listener->on_changed(SceneType::Game, params, should_clear_stuck);
-            break;
-        }
-        case SDLK_n: {
-            Parameter params;
-            params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Normal));
-            bool should_clear_stuck = false;
-            listener->on_changed(SceneType::Game, params, should_clear_stuck);
-            break;
-        }
-        case SDLK_h: {
-            Parameter params;
-            params.set(GameScene::PARAM_KEY_LEVEL, static_cast<int>(Define::Level::Hard));
-            bool should_clear_stuck = false;
-            listener->on_changed(SceneType::Game, params, should_clear_stuck);
-            break;
-        }
-        default:
-            break;
+
+    if (params.get(GameScene::PARAM_KEY_LEVEL) != -1) {
+        listener->on_changed(SceneType::Game, params, should_clear_stuck);
     }
 }
 
@@ -55,7 +42,7 @@ void TitleScene::update(const SDL_Event &event) {
  * @param font フォント
  */
 void TitleScene::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
-    surface = TTF_RenderUTF8_Blended(font, "Title", {0, 0, 0, 255});
+    surface = TTF_RenderUTF8_Blended(font, "Title", Define::BLUE);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
 
     SDL_Rect rect = {0, 0, surface->w, surface->h};

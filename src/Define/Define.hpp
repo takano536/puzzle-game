@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SDL2/SDL.h>
+
 #include <string>
 
 /**
@@ -15,10 +17,9 @@ class Define final {
     const static int SUCCESS;
     const static int ERROR;
 
-    const static int BG_R;
-    const static int BG_G;
-    const static int BG_B;
-    const static int BG_A;
+    const static SDL_Color BLACK;
+    const static SDL_Color WHITE;
+    const static SDL_Color BLUE;
 
     const static std::string FONT_PATH;
     const static int FONT_SIZE;
