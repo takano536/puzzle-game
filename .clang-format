@@ -28,7 +28,7 @@ BreakBeforeBraces: Custom
 # true なら独立行にする
 BraceWrapping:
     AfterControlStatement: false
-    AfterEnum: true
+    AfterEnum: false
     AfterFunction: false
     AfterStruct: false
     AfterUnion: true

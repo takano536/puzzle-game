@@ -7,7 +7,11 @@ int SDL_main(int argc, char *argv[]) {
     if (app.init() != 0) {
         return -1;
     }
-    app.run();
+
+    while (!app.should_quit()) {
+        app.run();
+    }
+
     app.deinit();
     return 0;
 }

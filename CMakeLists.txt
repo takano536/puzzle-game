@@ -9,12 +9,17 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories($ENV{HOME}/.local/include/SDL2)
 link_directories($ENV{HOME}/.local/lib)
 
+file(GLOB_RECURSE TARGETS *.cpp)
+
 add_executable(
-    synchronized-puzzle 
-    main.cpp
-    Application/Application.cpp
-    Define/Define.cpp
-    Looper/Looper.cpp
+    synchronized-puzzle
+    src/main.cpp
+    src/Application/Application.cpp
+    src/Define/Define.cpp
+    src/Looper/Looper.cpp
+    src/Scene/AbstractScene/AbstractScene.cpp
+    src/Scene/Parameter/Parameter.cpp
+    src/Scene/TitleScene/TitleScene.cpp
 )
 
 target_include_directories(
