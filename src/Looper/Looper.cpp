@@ -35,6 +35,7 @@ int Looper::loop(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *text
     InputMonitor::get_instance().update();
     scenes.top()->update();
 
+    SDL_SetRenderDrawColor(renderer, Define::BLACK.r, Define::BLACK.g, Define::BLACK.b, Define::BLACK.a);
     SDL_RenderClear(renderer);
     scenes.top()->draw(renderer, surface, texture, font);
     SDL_RenderPresent(renderer);

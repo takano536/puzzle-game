@@ -8,27 +8,29 @@
  * @brief 押されたボタンを検知して、フレーム数を更新する
  */
 int InputMonitor::update() {
-    std::set<SDL_Keycode> inputs;
+    std::set<SDL_Keycode> pressing_inputs, releasing_inputs;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_KEYDOWN:
-                inputs.insert(event.key.keysym.sym);
+                SDL_Log("Key Down: %s", SDL_GetKeyName(event.key.keysym.sym));
+                pressing_inputs.insert(event.key.keysym.sym);
+                break;
+            case SDL_KEYUP:
+                SDL_Log("Key Up: %s", SDL_GetKeyName(event.key.keysym.sym));
+                releasing_inputs.insert(event.key.keysym.sym);
                 break;
             default:
                 break;
         }
     }
 
-    for (const auto &input : inputs) {
+    for (const auto &input : pressing_inputs) {
         releasing_frame_cnts[input] = 0;
         pressing_frame_cnts[input]++;
     }
-    for (auto &[key, value] : releasing_frame_cnts) {
-        if (inputs.contains(key)) {
-            continue;
-        }
-        pressing_frame_cnts[key] = 0;
-        value++;
+    for (const auto &input : releasing_inputs) {
+        pressing_frame_cnts[input] = 0;
+        releasing_frame_cnts[input]++;
     }
     return 0;
 }

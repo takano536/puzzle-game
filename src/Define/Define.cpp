@@ -10,6 +10,7 @@ const int Define::SUCCESS = 0;
 const int Define::ERROR = -1;
 
 const SDL_Color Define::BLACK = {33, 33, 33, 255};
+const SDL_Color Define::WHITE = {222, 222, 222, 255};
 const SDL_Color Define::BLUE = {66, 165, 245, 255};
 
 const std::string Define::FONT_PATH = "../assets/fonts/Montserrat-VariableFont_wght.ttf";

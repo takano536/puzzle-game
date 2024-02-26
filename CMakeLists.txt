@@ -22,6 +22,7 @@ add_executable(
     src/FpsKeeper/FpsKeeper.cpp
     src/InputMonitor/InputMonitor.cpp
     src/Looper/Looper.cpp
+    src/Object/Player/Player.cpp
     src/Scene/AbstractScene/AbstractScene.cpp
     src/Scene/GameScene/GameScene.cpp
     src/Scene/Parameter/Parameter.cpp

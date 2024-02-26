@@ -3,6 +3,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <memory>
+
+#include "../../Object/Player/Player.hpp"
 #include "../AbstractScene/AbstractScene.hpp"
 
 #include <string>
@@ -21,4 +24,5 @@ class GameScene : public AbstractScene {
 
   private:
     int level;
+    std::shared_ptr<Player> player;
 };
