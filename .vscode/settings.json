@@ -61,11 +61,12 @@
         "cinttypes": "cpp",
         "list": "cpp",
         "set": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "complex": "cpp"
     },
     "code-runner.executorMap": {
-        "c": "cd $dir && g++ -std=gnu++20 -I$workspaceRoot/ac-library -Wall -Wextra -O2 $fileName -o $fileNameWithoutExt.exe && $dir$fileNameWithoutExt.exe ; rm $dir$fileNameWithoutExt.exe",
-        "cpp": "cd $dir && g++ -std=gnu++20 -I$workspaceRoot/ac-library -Wall -Wextra -O2 $fileName -o $fileNameWithoutExt.exe && $dir$fileNameWithoutExt.exe ; rm $dir$fileNameWithoutExt.exe",
+        "c": "cd $dir && g++ -std=gnu++20 -I$workspaceRoot/src -I\"$env:HOME/.local/include\" -Wall -Wextra -O2 $fileName -o $fileNameWithoutExt.exe && $dir$fileNameWithoutExt.exe ; rm $dir$fileNameWithoutExt.exe",
+        "cpp": "cd $dir && g++ -std=gnu++20 -I$workspaceRoot/src -I\"$env:HOME/.local/include\" -Wall -Wextra -O2 $fileName -o $fileNameWithoutExt.exe && $dir$fileNameWithoutExt.exe ; rm $dir$fileNameWithoutExt.exe",
     },
     "editor.tabSize": 4,
     "editor.detectIndentation": false,
