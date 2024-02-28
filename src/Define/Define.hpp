@@ -11,20 +11,20 @@
  */
 class Define final {
   public:
-    const static SDL_Point WINDOW_SIZE;
-    const static SDL_Point WINDOW_CENTER;
-    const static std::string WIN_TITLE;
+    static const SDL_Point WINDOW_SIZE;
+    static const SDL_Point WINDOW_CENTER;
+    static const std::string WIN_TITLE;
 
-    const static int SUCCESS;
-    const static int ERROR;
+    static const int SUCCESS;
+    static const int ERROR;
 
-    const static SDL_Color BLACK;
-    const static SDL_Color WHITE;
-    const static SDL_Color BLUE;
-    const static SDL_Color RED;
+    static const SDL_Color BLACK;
+    static const SDL_Color WHITE;
+    static const SDL_Color BLUE;
+    static const SDL_Color RED;
 
-    const static std::string FONT_PATH;
-    const static int FONT_SIZE;
+    static const std::string FONT_PATH;
+    static const int FONT_SIZE;
 
     enum class LEVEL {
         EASY,

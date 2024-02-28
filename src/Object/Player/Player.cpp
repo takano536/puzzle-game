@@ -1,17 +1,11 @@
 #include "Player.hpp"
 
-#include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 
-#include <array>
-#include <tuple>
-#include <vector>
-
-#include "../../Define/Define.hpp"
 #include "../../InputMonitor/InputMonitor.hpp"
 #include "../../ShapeRenderer/ShapeRenderer.hpp"
 
-const static std::array<std::tuple<Define::DIRECTION, std::vector<SDL_KeyCode>, SDL_Point>, 4> KEY_MAPS = {
+const std::array<std::tuple<Define::DIRECTION, std::vector<SDL_KeyCode>, SDL_Point>, 4> Player::KEY_MAPS = {
     std::make_tuple(Define::DIRECTION::UP, std::vector<SDL_KeyCode>{SDLK_w, SDLK_UP}, SDL_Point{0, -1}),
     std::make_tuple(Define::DIRECTION::RIGHT, std::vector<SDL_KeyCode>{SDLK_d, SDLK_RIGHT}, SDL_Point{1, 0}),
     std::make_tuple(Define::DIRECTION::DOWN, std::vector<SDL_KeyCode>{SDLK_s, SDLK_DOWN}, SDL_Point{0, 1}),

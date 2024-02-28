@@ -1,5 +1,12 @@
 #pragma once
 
+#include <SDL2/SDL.h>
+
+#include <array>
+#include <tuple>
+#include <vector>
+
+#include "../../Define/Define.hpp"
 #include "../Object.hpp"
 
 class Player : public Object {
@@ -10,9 +17,11 @@ class Player : public Object {
     void draw(SDL_Renderer *renderer) const override;
 
   private:
-    void move();
+    static const std::array<std::tuple<Define::DIRECTION, std::vector<SDL_KeyCode>, SDL_Point>, 4> KEY_MAPS;
 
     SDL_Rect rect;
     SDL_Color color;
     int speed;
+
+    void move();
 };
