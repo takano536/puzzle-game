@@ -36,12 +36,12 @@ const std::map<Define::DIRECTION, int> GameScene::MARGIN = {
  */
 GameScene::GameScene(IOnChangedListener *listener, const Parameter &params)
     : AbstractScene(listener, params),
-      puzzle_generator(nullptr),
-      puzzle_solver(nullptr),
       floors(std::make_unique<FloorManager>()),
       holes(std::make_unique<HoleManager>()),
+      players(std::make_unique<PlayerManager>()),
       walls(std::make_unique<WallManager>()),
-      players(std::make_unique<PlayerManager>()) {
+      puzzle_generator(nullptr),
+      puzzle_solver(nullptr) {
 
     level = params.get(PARAM_KEY_LEVEL);
 
@@ -109,8 +109,9 @@ void GameScene::update() {
  * @param font フォント
  */
 void GameScene::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
-    floors->draw(renderer, surface, texture, font);
-    holes->draw(renderer, surface, texture, font);
-    players->draw(renderer, surface, texture, font);
-    walls->draw(renderer, surface, texture, font);
+    static_cast<void>(surface), static_cast<void>(texture), static_cast<void>(font);
+    floors->draw(renderer);
+    holes->draw(renderer);
+    players->draw(renderer);
+    walls->draw(renderer);
 }

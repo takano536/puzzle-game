@@ -45,7 +45,6 @@ void ShapeRenderer::aafilledCircleRGBA(SDL_Renderer *renderer, Sint16 x, Sint16 
  * @param a アルファ成分
  */
 void ShapeRenderer::aafilledRoundRectRGBA(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-    x1--, y2--;
     // 四隅に円を描画
     aafilledCircleRGBA(renderer, x1 - rad, y1 + rad, rad, r, g, b, a);
     aafilledCircleRGBA(renderer, x2 + rad, y1 + rad, rad, r, g, b, a);

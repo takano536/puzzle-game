@@ -13,8 +13,8 @@ void WallManager::update() {
     }
 }
 
-void WallManager::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void WallManager::draw(SDL_Renderer *renderer) const {
     for (const auto &wall : walls) {
-        wall->draw(renderer, surface, texture, font);
+        wall->draw(renderer);
     }
 }

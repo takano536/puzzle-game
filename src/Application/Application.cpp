@@ -10,9 +10,9 @@
 Application::Application()
     : window(nullptr, SDL_DestroyWindow),
       renderer(nullptr, SDL_DestroyRenderer),
-      font(nullptr, TTF_CloseFont),
       surface(nullptr, SDL_FreeSurface),
       texture(nullptr, SDL_DestroyTexture),
+      font(nullptr, TTF_CloseFont),
       bg_color(Define::WHITE) {
 }
 

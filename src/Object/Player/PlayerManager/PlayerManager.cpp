@@ -13,8 +13,8 @@ void PlayerManager::update() {
     }
 }
 
-void PlayerManager::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void PlayerManager::draw(SDL_Renderer *renderer) const {
     for (const auto &Player : Players) {
-        Player->draw(renderer, surface, texture, font);
+        Player->draw(renderer);
     }
 }

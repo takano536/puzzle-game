@@ -7,4 +7,6 @@
  */
 AbstractScene::AbstractScene(IOnChangedListener *listener, const Parameter &params)
     : listener(listener) {
+
+    static_cast<void>(params);
 }

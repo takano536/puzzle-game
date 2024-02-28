@@ -16,9 +16,9 @@ PuzzleGenerator::PuzzleGenerator(const SDL_Point &size, const std::string &inner
     : size(size),
       inner_marks(inner_marks),
       outer_marks(outer_marks),
-      seed(std::numeric_limits<std::uint_fast32_t>::max()),
       start_mark(start_mark),
-      start_num(start_num) {
+      start_num(start_num),
+      seed(std::numeric_limits<std::uint_fast32_t>::max()) {
 }
 
 /**
@@ -90,6 +90,7 @@ std::unique_ptr<std::vector<std::string>> PuzzleGenerator::generate() {
  * @note 未実装
  */
 std::unique_ptr<std::vector<std::string>> PuzzleGenerator::decrypt(const std::string &password) {
+    static_cast<void>(password);
     ERR("Not implemented");
     return {};
 }
@@ -101,6 +102,7 @@ std::unique_ptr<std::vector<std::string>> PuzzleGenerator::decrypt(const std::st
  * @note 未実装
  */
 std::string PuzzleGenerator::encrypt(const std::vector<std::string> &puzzle) {
+    static_cast<void>(puzzle);
     ERR("Not implemented");
     return {};
 }

@@ -35,7 +35,7 @@ void Player::update() {
 /**
  * @brief プレイヤーの描画
  */
-void Player::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void Player::draw(SDL_Renderer *renderer) const {
     ShapeRenderer::aafilledCircleRGBA(renderer, rect.x + rect.w / 2, rect.y + rect.h / 2, rect.w / 2, color.r, color.g, color.b, color.a);
 }
 

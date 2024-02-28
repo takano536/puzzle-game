@@ -21,6 +21,6 @@ void Hole::update() {
 /**
  * @brief 穴の描画
  */
-void Hole::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void Hole::draw(SDL_Renderer *renderer) const {
     ShapeRenderer::aafilledCircleRGBA(renderer, rect.x + rect.w / 2, rect.y + rect.h / 2, rect.w / 2, color.r, color.g, color.b, color.a);
 }

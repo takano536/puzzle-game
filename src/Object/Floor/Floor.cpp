@@ -20,7 +20,7 @@ void Floor::update() {
 /**
  * @brief 床の描画
  */
-void Floor::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void Floor::draw(SDL_Renderer *renderer) const {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &rect);
 }

@@ -13,8 +13,8 @@ void HoleManager::update() {
     }
 }
 
-void HoleManager::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void HoleManager::draw(SDL_Renderer *renderer) const {
     for (const auto &Hole : Holes) {
-        Hole->draw(renderer, surface, texture, font);
+        Hole->draw(renderer);
     }
 }

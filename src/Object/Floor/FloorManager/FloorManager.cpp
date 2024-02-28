@@ -13,8 +13,8 @@ void FloorManager::update() {
     }
 }
 
-void FloorManager::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
+void FloorManager::draw(SDL_Renderer *renderer) const {
     for (const auto &Floor : Floors) {
-        Floor->draw(renderer, surface, texture, font);
+        Floor->draw(renderer);
     }
 }
