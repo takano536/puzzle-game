@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../../Define/Define.hpp"
+#include "../Define/Define.hpp"
 
 /**
  * @brief エラー終了処理

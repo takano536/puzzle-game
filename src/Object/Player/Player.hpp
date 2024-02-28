@@ -4,13 +4,15 @@
 
 class Player : public Object {
   public:
-    Player();
+    Player(SDL_Point coord, SDL_Point size, SDL_Color color, int speed);
     virtual ~Player() = default;
     void update() override;
     void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const override;
 
   private:
     void move();
-    SDL_FRect rect;
+
+    SDL_Rect rect;
     SDL_Color color;
+    int speed;
 };

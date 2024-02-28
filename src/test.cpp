@@ -9,11 +9,11 @@
 
 int SDL_main(int argc, char *argv[]) {
     SDL_Point size = {10, 10};
-    std::map<Object, char> marks = {
-        {Object::Floor, '.'},
-        {Object::Wall, '#'},
-        {Object::Start, 'P'},
-        {Object::Hole, 'o'},
+    std::map<Define::CELL_TYPE, char> cell_marks = {
+        {Define::CELL_TYPE::FLOOR, '.'},
+        {Define::CELL_TYPE::WALL, '#'},
+        {Define::CELL_TYPE::START, 'P'},
+        {Define::CELL_TYPE::HOLE, 'o'},
     };
     std::map<Define::DIRECTION, char> direction_marks = {
         {Define::DIRECTION::UP, 'U'},
@@ -24,7 +24,7 @@ int SDL_main(int argc, char *argv[]) {
     std::string inner_marks = ".......oo#";
     std::string outer_marks = "ooooooooo#";
     PuzzleGenerator puzzle_generator(size, inner_marks, outer_marks, 'P', 2);
-    PuzzleSolver puzzle_solver(marks);
+    PuzzleSolver puzzle_solver(cell_marks);
 
     while (puzzle_solver.get_rate() < 20) {
         puzzle_solver.reset();

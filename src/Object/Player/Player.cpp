@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 #include <array>
 #include <tuple>
@@ -8,22 +9,20 @@
 
 #include "../../Define/Define.hpp"
 #include "../../InputMonitor/InputMonitor.hpp"
-
-static const int SIZE = 20;
-const static int SPEED = 5;
+#include "../../ShapeRenderer/ShapeRenderer.hpp"
 
 const static std::array<std::tuple<Define::DIRECTION, std::vector<SDL_KeyCode>, SDL_Point>, 4> KEY_MAPS = {
-    std::make_tuple(Define::DIRECTION::UP, std::vector<SDL_KeyCode>{SDLK_w, SDLK_UP}, SDL_Point{0, -SPEED}),
-    std::make_tuple(Define::DIRECTION::RIGHT, std::vector<SDL_KeyCode>{SDLK_d, SDLK_RIGHT}, SDL_Point{SPEED, 0}),
-    std::make_tuple(Define::DIRECTION::DOWN, std::vector<SDL_KeyCode>{SDLK_s, SDLK_DOWN}, SDL_Point{0, SPEED}),
-    std::make_tuple(Define::DIRECTION::LEFT, std::vector<SDL_KeyCode>{SDLK_a, SDLK_LEFT}, SDL_Point{-SPEED, 0}),
+    std::make_tuple(Define::DIRECTION::UP, std::vector<SDL_KeyCode>{SDLK_w, SDLK_UP}, SDL_Point{0, -1}),
+    std::make_tuple(Define::DIRECTION::RIGHT, std::vector<SDL_KeyCode>{SDLK_d, SDLK_RIGHT}, SDL_Point{1, 0}),
+    std::make_tuple(Define::DIRECTION::DOWN, std::vector<SDL_KeyCode>{SDLK_s, SDLK_DOWN}, SDL_Point{0, 1}),
+    std::make_tuple(Define::DIRECTION::LEFT, std::vector<SDL_KeyCode>{SDLK_a, SDLK_LEFT}, SDL_Point{-1, 0}),
 };
 
 /**
  * @brief プレイヤーのコンストラクタ
  */
-Player::Player()
-    : rect({0, 0, SIZE, SIZE}), color(Define::BLUE) {
+Player::Player(SDL_Point coord, SDL_Point size, SDL_Color color, int speed)
+    : rect({coord.x, coord.y, size.x, size.y}), color(color), speed(speed) {
 }
 
 /**
@@ -37,8 +36,7 @@ void Player::update() {
  * @brief プレイヤーの描画
  */
 void Player::draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderFillRectF(renderer, &rect);
+    ShapeRenderer::aafilledCircleRGBA(renderer, rect.x + rect.w / 2, rect.y + rect.h / 2, rect.w / 2, color.r, color.g, color.b, color.a);
 }
 
 /**
@@ -50,8 +48,8 @@ void Player::move() {
     for (const auto &[direction, keys, vec] : KEY_MAPS) {
         for (const auto &key : keys) {
             if (InputMonitor::get_instance().get_pressing_frame_cnt(key) > 0) {
-                moving_vec.x += vec.x;
-                moving_vec.y += vec.y;
+                moving_vec.x += vec.x * speed;
+                moving_vec.y += vec.y * speed;
             }
         }
     }

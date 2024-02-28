@@ -39,8 +39,8 @@ int Application::init() {
             Define::WIN_TITLE.c_str(),
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            Define::WIN_W,
-            Define::WIN_H,
+            Define::WINDOW_SIZE.x,
+            Define::WINDOW_SIZE.y,
             SDL_WINDOW_SHOWN
         ),
         SDL_DestroyWindow
@@ -66,7 +66,7 @@ int Application::init() {
 
     // サーフェスの作成
     surface = std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>(
-        SDL_CreateRGBSurface(0, Define::WIN_W, Define::WIN_H, 32, 0, 0, 0, 0),
+        SDL_CreateRGBSurface(0, Define::WINDOW_SIZE.x, Define::WINDOW_SIZE.y, 32, 0, 0, 0, 0),
         SDL_FreeSurface
     );
     if (surface == nullptr) {

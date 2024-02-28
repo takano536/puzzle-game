@@ -11,6 +11,11 @@
 
 /**
  * @brief パズル生成クラス
+ * @param size SDL_Point - パズルのサイズ
+ * @param inner_marks std::string - 内側で使用するマーク
+ * @param outer_marks std::string - 外側で使用するマーク
+ * @param start_mark char - スタートのマーク
+ * @param start_num int - スタートの数
  */
 class PuzzleGenerator final {
   public:

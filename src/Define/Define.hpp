@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <array>
 #include <string>
 
 /**
@@ -10,8 +11,8 @@
  */
 class Define final {
   public:
-    const static int WIN_W;
-    const static int WIN_H;
+    const static SDL_Point WINDOW_SIZE;
+    const static SDL_Point WINDOW_CENTER;
     const static std::string WIN_TITLE;
 
     const static int SUCCESS;
@@ -20,6 +21,7 @@ class Define final {
     const static SDL_Color BLACK;
     const static SDL_Color WHITE;
     const static SDL_Color BLUE;
+    const static SDL_Color RED;
 
     const static std::string FONT_PATH;
     const static int FONT_SIZE;
@@ -35,5 +37,12 @@ class Define final {
         DOWN,
         LEFT,
         RIGHT
+    };
+
+    enum class CELL_TYPE {
+        FLOOR,
+        WALL,
+        START,
+        HOLE,
     };
 };

@@ -18,11 +18,18 @@ add_executable(
     ${PROJECT_NAME}
     src/main.cpp
     src/Application/Application.cpp
+    src/ColorGradator/ColorGradator.cpp
     src/Define/Define.cpp
+    src/ErrorHandler/ErrorHandler.cpp
     src/FpsKeeper/FpsKeeper.cpp
     src/InputMonitor/InputMonitor.cpp
     src/Looper/Looper.cpp
+    src/Object/Floor/Floor.cpp
+    src/Object/Floor/FloorManager/FloorManager.cpp
+    src/Object/Hole/Hole.cpp
+    src/Object/Hole/HoleManager/HoleManager.cpp
     src/Object/Player/Player.cpp
+    src/Object/Player/PlayerManager/PlayerManager.cpp
     src/Object/Wall/Wall.cpp
     src/Object/Wall/WallManager/WallManager.cpp
     src/PuzzleGenerator/PuzzleGenerator.cpp
@@ -31,7 +38,7 @@ add_executable(
     src/Scene/GameScene/GameScene.cpp
     src/Scene/Parameter/Parameter.cpp
     src/Scene/TitleScene/TitleScene.cpp
-    src/Utilities/ErrorHandler/ErrorHandler.cpp
+    src/ShapeRenderer/ShapeRenderer.cpp
 )
 
 target_link_libraries(
@@ -42,4 +49,5 @@ target_link_libraries(
     SDL2_image
     SDL2_ttf
     SDL2_mixer
+    SDL2_gfx
 )

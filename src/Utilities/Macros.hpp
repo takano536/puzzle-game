@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ErrorHandler/ErrorHandler.hpp"
+#include "../ErrorHandler/ErrorHandler.hpp"
 
 #include <source_location>
 

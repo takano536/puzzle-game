@@ -8,15 +8,16 @@
 #include <limits>
 #include <queue>
 
-static const int INF = std::numeric_limits<int>::max();
-static const int NaN = -1;
-static const std::map<Define::DIRECTION, SDL_Point> DIR_VECS = {
+const int PuzzleSolver::INF = std::numeric_limits<int>::max();
+const int PuzzleSolver::NaN = -1;
+
+const std::map<Define::DIRECTION, SDL_Point> PuzzleSolver::DIR_VECS = {
     {Define::DIRECTION::UP, {-1, 0}},
     {Define::DIRECTION::RIGHT, {0, 1}},
     {Define::DIRECTION::DOWN, {1, 0}},
     {Define::DIRECTION::LEFT, {0, -1}},
 };
-static const std::map<Define::DIRECTION, char> DIR_MAPS = {
+const std::map<Define::DIRECTION, char> PuzzleSolver::DIR_MAPS = {
     {Define::DIRECTION::UP, 'U'},
     {Define::DIRECTION::RIGHT, 'R'},
     {Define::DIRECTION::DOWN, 'D'},
@@ -27,7 +28,7 @@ static const std::map<Define::DIRECTION, char> DIR_MAPS = {
  * @brief コンストラクタ
  * @param marks パズルで使用するオブジェクトと文字の対応マップ
  */
-PuzzleSolver::PuzzleSolver(const std::map<Object, char> &marks)
+PuzzleSolver::PuzzleSolver(const std::map<Define::CELL_TYPE, char> &marks)
     : puzzle(std::make_unique<std::vector<std::string>>()),
       marks(marks),
       step(NaN) {
@@ -45,14 +46,14 @@ void PuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
 
     int player_num = 0;
     for (const auto &row : *this->puzzle) {
-        player_num += std::ranges::count(row, marks.at(Object::Start));
+        player_num += std::ranges::count(row, marks.at(Define::CELL_TYPE::START));
     }
 
     std::vector<SDL_Point> start_coords(player_num);
     auto iter = start_coords.begin();
     for (int i = 0; i < size.y; i++) {
         for (int j = 0; j < size.x; j++) {
-            if ((*this->puzzle)[i][j] == marks.at(Object::Start)) {
+            if ((*this->puzzle)[i][j] == marks.at(Define::CELL_TYPE::START)) {
                 *iter = {i, j};
                 iter++;
             }
@@ -92,10 +93,10 @@ void PuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
             if (next_coord.x < 0 || next_coord.x >= size.x || next_coord.y < 0 || next_coord.y >= size.y) {
                 continue;
             }
-            if ((*this->puzzle)[next_coord.x][next_coord.y] == marks.at(Object::Wall)) {
+            if ((*this->puzzle)[next_coord.x][next_coord.y] == marks.at(Define::CELL_TYPE::WALL)) {
                 continue;
             }
-            if ((*this->puzzle)[next_coord.x][next_coord.y] == marks.at(Object::Hole)) {
+            if ((*this->puzzle)[next_coord.x][next_coord.y] == marks.at(Define::CELL_TYPE::HOLE)) {
                 return coords;
             }
             coord.x = next_coord.x;
