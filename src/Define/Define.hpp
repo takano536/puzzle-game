@@ -33,6 +33,7 @@ class Define final {
     };
 
     enum class DIRECTION {
+        NONE = -1,
         UP,
         DOWN,
         LEFT,

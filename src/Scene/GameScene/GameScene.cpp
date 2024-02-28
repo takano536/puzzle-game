@@ -85,7 +85,7 @@ GameScene::GameScene(IOnChangedListener *listener, const Parameter &params)
                 holes->add(SDL_Point(coord.x + padding, coord.y + padding), SDL_Point(size.x - padding * 2, size.y - padding * 2), Define::WHITE);
             }
             if (this->puzzle[i][j] == CELL_MARKS.at(Define::CELL_TYPE::START)) {
-                players->add(coord, size, Define::RED, PLAYER_SPEED);
+                players->add(coord, size, size, Define::RED, PLAYER_SPEED);
             }
         }
     }

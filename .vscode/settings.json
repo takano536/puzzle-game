@@ -62,7 +62,13 @@
         "list": "cpp",
         "set": "cpp",
         "source_location": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "iomanip": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     },
     "code-runner.executorMap": {
         "c": "cd $dir && g++ -std=gnu++20 -I$workspaceRoot/src -I\"$env:HOME/.local/include\" -Wall -Wextra -O2 $fileName -o $fileNameWithoutExt.exe && $dir$fileNameWithoutExt.exe ; rm $dir$fileNameWithoutExt.exe",
