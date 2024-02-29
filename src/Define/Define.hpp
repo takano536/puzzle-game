@@ -16,7 +16,7 @@ class Define final {
     static const std::string WIN_TITLE;
 
     static const int SUCCESS;
-    static const int ERROR;
+    static const int FAILURE;
 
     static const SDL_Color BLACK;
     static const SDL_Color WHITE;

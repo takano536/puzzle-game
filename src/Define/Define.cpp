@@ -7,7 +7,7 @@ const SDL_Point Define::WINDOW_CENTER = {WINDOW_SIZE.x / 2, WINDOW_SIZE.y / 2};
 const std::string Define::WIN_TITLE = "SYNCHRONIZED PUZZLE";
 
 const int Define::SUCCESS = 0;
-const int Define::ERROR = -1;
+const int Define::FAILURE = -1;
 
 const SDL_Color Define::BLACK = {33, 33, 33, 255};
 const SDL_Color Define::WHITE = {222, 222, 222, 255};

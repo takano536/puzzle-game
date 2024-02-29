@@ -13,5 +13,5 @@ void Parameter::set(std::string key, int value) {
  * @brief パラメータを取得する
  */
 int Parameter::get(std::string key) const {
-    return params.contains(key) ? params.at(key) : Define::ERROR;
+    return params.contains(key) ? params.at(key) : Define::FAILURE;
 }

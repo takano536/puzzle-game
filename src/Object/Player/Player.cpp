@@ -24,18 +24,29 @@ const std::map<Define::DIRECTION, SDL_Point> Player::MOVING_DIRS = {
  */
 Player::Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color, int speed)
     : rect({coord.x, coord.y, player_size.x, player_size.y}),
+      init_coord(coord),
+      prev_coord(coord),
       cell_size(cell_size),
       color(color),
       moving_dir(Define::DIRECTION::NONE),
-      dest({-1, -1}),
+      dest(coord),
       speed(speed) {
 }
 
 /**
- * @brief プレイヤーの更新
+ * @brief プレイヤーの更新(オーバーライド)
  */
 void Player::update() {
-    move();
+    ERR("This function is not allowed");
+}
+
+/**
+ * @brief プレイヤーの更新
+ * @param object_positions オブジェクトの位置情報
+ * @return 移動先が穴だったらDefine::FAILURE, それ以外はDefine::SUCCESS
+ */
+int Player::update(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions) {
+    return move(are_stopped_everyone, object_positions);
 }
 
 /**
@@ -46,10 +57,33 @@ void Player::draw(SDL_Renderer *renderer) const {
 }
 
 /**
- * @brief プレイヤーの移動
+ * @brief プレイヤーのリセット
  */
-void Player::move() {
-    if (moving_dir == Define::DIRECTION::NONE) {
+void Player::reset() {
+    rect.x = init_coord.x;
+    rect.y = init_coord.y;
+    prev_coord = init_coord;
+    moving_dir = Define::DIRECTION::NONE;
+    dest = init_coord;
+}
+
+/**
+ * @brief プレイヤーのアンドゥ
+ */
+void Player::undo() {
+    rect.x = prev_coord.x;
+    rect.y = prev_coord.y;
+    moving_dir = Define::DIRECTION::NONE;
+    dest = init_coord;
+}
+
+/**
+ * @brief プレイヤーの移動
+ * @param object_positions オブジェクトの位置情報
+ * @return 移動先が穴だったらDefine::FAILURE, それ以外はDefine::SUCCESS
+ */
+int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions) {
+    if (are_stopped_everyone && moving_dir == Define::DIRECTION::NONE) {
         for (const auto &[dir, keys] : KEY_MAPS) {
             for (const auto &key : keys) {
                 if (InputMonitor::get_instance().get_pressing_frame_cnt(key) > 0) {
@@ -58,47 +92,68 @@ void Player::move() {
             }
         }
         if (moving_dir == Define::DIRECTION::NONE) {
-            return;
+            return Define::SUCCESS;
         }
-        update_dest();
+        int next_dest_x = rect.x + MOVING_DIRS.at(moving_dir).x * cell_size.x;
+        int next_dest_y = rect.y + MOVING_DIRS.at(moving_dir).y * cell_size.y;
+        SDL_Point cell_idx = {next_dest_x / cell_size.x, next_dest_y / cell_size.y};
+        if (object_positions[cell_idx.y][cell_idx.x] == Define::CELL_TYPE::HOLE) {
+            moving_dir = Define::DIRECTION::NONE;
+            return Define::FAILURE;
+        }
+        if (object_positions[cell_idx.y][cell_idx.x] == Define::CELL_TYPE::WALL) {
+            moving_dir = Define::DIRECTION::NONE;
+            return Define::SUCCESS;
+        }
+        dest = {next_dest_x, next_dest_y};
+    }
+    if (moving_dir == Define::DIRECTION::NONE) {
+        return Define::SUCCESS;
     }
 
+    prev_coord = {rect.x, rect.y};
     rect.x += MOVING_DIRS.at(moving_dir).x * speed;
     rect.y += MOVING_DIRS.at(moving_dir).y * speed;
 
     switch (moving_dir) {
         case Define::DIRECTION::UP:
-            if (rect.y <= dest.y) {
+            if (rect.y < dest.y) {
                 rect.y = dest.y;
                 moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
             }
             break;
         case Define::DIRECTION::RIGHT:
-            if (rect.x >= dest.x) {
+            if (rect.x > dest.x) {
                 rect.x = dest.x;
                 moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
             }
             break;
         case Define::DIRECTION::DOWN:
-            if (rect.y >= dest.y) {
+            if (rect.y > dest.y) {
                 rect.y = dest.y;
                 moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
             }
             break;
         case Define::DIRECTION::LEFT:
-            if (rect.x <= dest.x) {
+            if (rect.x < dest.x) {
                 rect.x = dest.x;
                 moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
             }
             break;
         default:
-            ERR("Invalid moving_dir");
+            ERR("Invalid direction");
     }
+
+    return Define::SUCCESS;
 }
 
 /**
- * @brief プレイヤーの目的地の更新
+ * @brief プレイヤーが停止しているか
  */
-void Player::update_dest() {
-    dest = {rect.x + MOVING_DIRS.at(moving_dir).x * cell_size.x, rect.y + MOVING_DIRS.at(moving_dir).y * cell_size.y};
+bool Player::is_stopped() const {
+    return moving_dir == Define::DIRECTION::NONE;
 }

@@ -25,6 +25,7 @@ class GameScene : public AbstractScene {
     void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const override;
 
     static const std::string PARAM_KEY_LEVEL;
+    static const std::map<Define::CELL_TYPE, char> CELL_MARKS;
 
   private:
     static const std::string INNER_MARKS;
@@ -34,7 +35,6 @@ class GameScene : public AbstractScene {
 
     static const int THRESHOLD;
     static const SDL_Point PUZZLE_SIZE;
-    static const std::map<Define::CELL_TYPE, char> CELL_MARKS;
 
     static const int PLAYER_SPEED;
 

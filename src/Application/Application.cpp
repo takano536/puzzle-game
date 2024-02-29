@@ -18,19 +18,19 @@ Application::Application()
 
 /**
  * @brief アプリケーションの初期化
- * @return 成功した場合は0, 失敗した場合は-1
+ * @return 成功した場合はDefine::SUCCESS, 失敗した場合はDefine::FAILURE
  */
 int Application::init() {
     // SDLの初期化
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         ERR("SDL could not initialize... SDL_Error: " + std::string(SDL_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     // TTFの初期化
     if (TTF_Init() != 0) {
         ERR("TTF could not initialize... TTF_Error: " + std::string(TTF_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     // ウィンドウの作成
@@ -47,7 +47,7 @@ int Application::init() {
     );
     if (window == nullptr) {
         ERR("Window could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     // レンダラの作成
@@ -61,7 +61,7 @@ int Application::init() {
     );
     if (renderer == nullptr) {
         ERR("Renderer could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     // サーフェスの作成
@@ -71,7 +71,7 @@ int Application::init() {
     );
     if (surface == nullptr) {
         ERR("Surface could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     // テクスチャの作成
@@ -81,7 +81,7 @@ int Application::init() {
     );
     if (texture == nullptr) {
         ERR("Texture could not be created... SDL_Error: %s" + std::string(SDL_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     // フォントの作成
@@ -91,7 +91,7 @@ int Application::init() {
     );
     if (font == nullptr) {
         ERR("Font could not be created... TTF_Error: %s" + std::string(TTF_GetError()));
-        return Define::ERROR;
+        return Define::FAILURE;
     }
 
     return Define::SUCCESS;
