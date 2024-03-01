@@ -8,26 +8,16 @@
 #include "../Define/Define.hpp"
 
 /**
- * @brief パズルソルバー
- * @param marks std::map<Define::CELL_TYPE, char> - PuzzleSolver::CELL_TYPE と char の対応表
+ * @brief パズルソルバーの抽象クラス
  */
-class PuzzleSolver final {
+class PuzzleSolver {
   public:
-    PuzzleSolver(const std::map<Define::CELL_TYPE, char> &marks);
-    void solve(std::unique_ptr<std::vector<std::string>> input);
-    void reset();
-    std::unique_ptr<std::vector<std::string>> get_puzzle() const;
-    std::vector<Define::DIRECTION> get_ans() const;
-    int get_rate() const;
-
-  private:
-    static const int INF;
-    static const int NaN;
-    static const std::map<Define::DIRECTION, SDL_Point> DIR_VECS;
-    static const std::map<Define::DIRECTION, char> DIR_MAPS;
-
-    std::unique_ptr<std::vector<std::string>> puzzle;
-    std::map<Define::CELL_TYPE, char> marks;
-    std::vector<Define::DIRECTION> ans;
-    int step;
+    PuzzleSolver() = default;
+    virtual ~PuzzleSolver() = default;
+    virtual void init(const std::map<Define::CELL_TYPE, char> &marks) = 0;
+    virtual void solve(std::unique_ptr<std::vector<std::string>> input) = 0;
+    virtual void reset() = 0;
+    virtual std::unique_ptr<std::vector<std::string>> get_puzzle() const = 0;
+    virtual std::vector<Define::DIRECTION> get_ans() const = 0;
+    virtual int get_rate() const = 0;
 };

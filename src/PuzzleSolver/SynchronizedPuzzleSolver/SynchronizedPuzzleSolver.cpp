@@ -1,4 +1,4 @@
-#include "PuzzleSolver.hpp"
+#include "SynchronizedPuzzleSolver.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -8,16 +8,16 @@
 #include <limits>
 #include <queue>
 
-const int PuzzleSolver::INF = std::numeric_limits<int>::max();
-const int PuzzleSolver::NaN = -1;
+const int SynchronizedPuzzleSolver::INF = std::numeric_limits<int>::max();
+const int SynchronizedPuzzleSolver::NaN = -1;
 
-const std::map<Define::DIRECTION, SDL_Point> PuzzleSolver::DIR_VECS = {
+const std::map<Define::DIRECTION, SDL_Point> SynchronizedPuzzleSolver::DIR_VECS = {
     {Define::DIRECTION::UP, {-1, 0}},
     {Define::DIRECTION::RIGHT, {0, 1}},
     {Define::DIRECTION::DOWN, {1, 0}},
     {Define::DIRECTION::LEFT, {0, -1}},
 };
-const std::map<Define::DIRECTION, char> PuzzleSolver::DIR_MAPS = {
+const std::map<Define::DIRECTION, char> SynchronizedPuzzleSolver::DIR_CHARS = {
     {Define::DIRECTION::UP, 'U'},
     {Define::DIRECTION::RIGHT, 'R'},
     {Define::DIRECTION::DOWN, 'D'},
@@ -25,13 +25,13 @@ const std::map<Define::DIRECTION, char> PuzzleSolver::DIR_MAPS = {
 };
 
 /**
- * @brief コンストラクタ
+ * @brief 初期化関数
  * @param marks パズルで使用するオブジェクトと文字の対応マップ
  */
-PuzzleSolver::PuzzleSolver(const std::map<Define::CELL_TYPE, char> &marks)
-    : puzzle(std::make_unique<std::vector<std::string>>()),
-      marks(marks),
-      step(NaN) {
+void SynchronizedPuzzleSolver::init(const std::map<Define::CELL_TYPE, char> &marks) {
+    puzzle = std::make_unique<std::vector<std::string>>();
+    this->marks = marks;
+    step = NaN;
 }
 
 /**
@@ -39,7 +39,7 @@ PuzzleSolver::PuzzleSolver(const std::map<Define::CELL_TYPE, char> &marks)
  * @param input パズル
  * @note パズルを解いて解答を保存する
  */
-void PuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
+void SynchronizedPuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
     this->puzzle = std::move(input);
 
     SDL_Point size = {static_cast<int>((*this->puzzle)[0].size()), static_cast<int>(this->puzzle->size())};
@@ -116,8 +116,8 @@ void PuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
                 continue;
             }
             dists[next_id] = dists[id] + 1;
-            que.push({next_id, path + DIR_MAPS.at(dir)});
-            pathes[next_id] = path + DIR_MAPS.at(dir);
+            que.push({next_id, path + DIR_CHARS.at(dir)});
+            pathes[next_id] = path + DIR_CHARS.at(dir);
         }
     }
 
@@ -139,27 +139,14 @@ void PuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
 
     this->step = min_dist;
     for (const auto &c : pathes[goal_id]) {
-        switch (c) {
-            case 'U':
-                this->ans.push_back(Define::DIRECTION::UP);
-                break;
-            case 'R':
-                this->ans.push_back(Define::DIRECTION::RIGHT);
-                break;
-            case 'D':
-                this->ans.push_back(Define::DIRECTION::DOWN);
-                break;
-            case 'L':
-                this->ans.push_back(Define::DIRECTION::LEFT);
-                break;
-        }
+        this->ans.push_back(std::ranges::find_if(DIR_CHARS, [c](const auto &dir) { return dir.second == c; })->first);
     }
 }
 
 /**
  * @brief パズルをリセットする
  */
-void PuzzleSolver::reset() {
+void SynchronizedPuzzleSolver::reset() {
     if (this->puzzle->empty()) {
         return;
     }
@@ -172,7 +159,7 @@ void PuzzleSolver::reset() {
  * @brief パズルを取得する
  * @return パズル
  */
-std::unique_ptr<std::vector<std::string>> PuzzleSolver::get_puzzle() const {
+std::unique_ptr<std::vector<std::string>> SynchronizedPuzzleSolver::get_puzzle() const {
     return std::make_unique<std::vector<std::string>>(*this->puzzle);
 }
 
@@ -180,7 +167,7 @@ std::unique_ptr<std::vector<std::string>> PuzzleSolver::get_puzzle() const {
  * @brief 解答を取得する
  * @return 解答
  */
-std::vector<Define::DIRECTION> PuzzleSolver::get_ans() const {
+std::vector<Define::DIRECTION> SynchronizedPuzzleSolver::get_ans() const {
     return ans;
 }
 
@@ -188,6 +175,6 @@ std::vector<Define::DIRECTION> PuzzleSolver::get_ans() const {
  * @brief 評価値を取得する
  * @return 評価値
  */
-int PuzzleSolver::get_rate() const {
+int SynchronizedPuzzleSolver::get_rate() const {
     return step;
 }

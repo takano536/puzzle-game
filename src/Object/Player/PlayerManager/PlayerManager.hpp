@@ -11,7 +11,7 @@
 
 class PlayerManager : public Object {
   public:
-    PlayerManager();
+    PlayerManager(bool is_slip = false);
     virtual ~PlayerManager() = default;
     void add(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color, int speed);
     void update() override;
@@ -21,4 +21,5 @@ class PlayerManager : public Object {
   private:
     std::vector<std::unique_ptr<Player>> players;
     std::vector<std::vector<Define::CELL_TYPE>> object_positions;
+    bool is_slip;
 };

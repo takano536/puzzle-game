@@ -5,7 +5,8 @@
 /**
  * @brief プレイヤーマネージャのコンストラクタ
  */
-PlayerManager::PlayerManager() {
+PlayerManager::PlayerManager(bool is_slip)
+    : is_slip(is_slip) {
 }
 
 /**
@@ -38,7 +39,7 @@ void PlayerManager::update() {
 
     bool is_fallen = false;
     for (const auto &Player : players) {
-        is_fallen |= Player->update(are_stopped_everyone, object_positions) == Define::FAILURE;
+        is_fallen |= Player->update(are_stopped_everyone, is_slip, object_positions) == Define::FAILURE;
     }
     if (is_fallen) {
         for (const auto &Player : players) {

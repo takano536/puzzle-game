@@ -33,7 +33,8 @@ add_executable(
     src/Object/Wall/Wall.cpp
     src/Object/Wall/WallManager/WallManager.cpp
     src/PuzzleGenerator/PuzzleGenerator.cpp
-    src/PuzzleSolver/PuzzleSolver.cpp
+    src/PuzzleSolver/IceFloorPuzzleSolver/IceFloorPuzzleSolver.cpp
+    src/PuzzleSolver/SynchronizedPuzzleSolver/SynchronizedPuzzleSolver.cpp
     src/Scene/AbstractScene/AbstractScene.cpp
     src/Scene/GameScene/GameScene.cpp
     src/Scene/Parameter/Parameter.cpp

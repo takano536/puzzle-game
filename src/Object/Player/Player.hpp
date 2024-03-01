@@ -21,7 +21,7 @@ class Player : public Object {
     Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color, int speed);
     virtual ~Player() = default;
     void update() override;
-    int update(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);
+    int update(const bool are_stopped_everyone, const bool is_slip, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);
     void draw(SDL_Renderer *renderer) const override;
     void reset();
     void undo();
@@ -41,4 +41,5 @@ class Player : public Object {
     int speed;
 
     int move(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);
+    int move_on_ice(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);
 };

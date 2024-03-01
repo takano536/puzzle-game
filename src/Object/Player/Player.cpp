@@ -45,8 +45,8 @@ void Player::update() {
  * @param object_positions オブジェクトの位置情報
  * @return 移動先が穴だったらDefine::FAILURE, それ以外はDefine::SUCCESS
  */
-int Player::update(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions) {
-    return move(are_stopped_everyone, object_positions);
+int Player::update(const bool are_stopped_everyone, const bool is_slip, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions) {
+    return is_slip ? move_on_ice(are_stopped_everyone, object_positions) : move(are_stopped_everyone, object_positions);
 }
 
 /**
@@ -104,6 +104,81 @@ int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<
         if (object_positions[cell_idx.y][cell_idx.x] == Define::CELL_TYPE::WALL) {
             moving_dir = Define::DIRECTION::NONE;
             return Define::SUCCESS;
+        }
+        dest = {next_dest_x, next_dest_y};
+    }
+    if (moving_dir == Define::DIRECTION::NONE) {
+        return Define::SUCCESS;
+    }
+
+    prev_coord = {rect.x, rect.y};
+    rect.x += MOVING_DIRS.at(moving_dir).x * speed;
+    rect.y += MOVING_DIRS.at(moving_dir).y * speed;
+
+    switch (moving_dir) {
+        case Define::DIRECTION::UP:
+            if (rect.y < dest.y) {
+                rect.y = dest.y;
+                moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
+            }
+            break;
+        case Define::DIRECTION::RIGHT:
+            if (rect.x > dest.x) {
+                rect.x = dest.x;
+                moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
+            }
+            break;
+        case Define::DIRECTION::DOWN:
+            if (rect.y > dest.y) {
+                rect.y = dest.y;
+                moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
+            }
+            break;
+        case Define::DIRECTION::LEFT:
+            if (rect.x < dest.x) {
+                rect.x = dest.x;
+                moving_dir = Define::DIRECTION::NONE;
+                prev_coord = dest;
+            }
+            break;
+        default:
+            ERR("Invalid direction");
+    }
+
+    return Define::SUCCESS;
+}
+
+/**
+ * @brief 氷の床上のプレイヤーの移動
+ * @param object_positions オブジェクトの位置情報
+ * @return Define::SUCCESS
+ */
+int Player::move_on_ice(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions) {
+    if (are_stopped_everyone && moving_dir == Define::DIRECTION::NONE) {
+        for (const auto &[dir, keys] : KEY_MAPS) {
+            for (const auto &key : keys) {
+                if (InputMonitor::get_instance().get_pressing_frame_cnt(key) > 0) {
+                    moving_dir = dir;
+                }
+            }
+        }
+        if (moving_dir == Define::DIRECTION::NONE) {
+            return Define::SUCCESS;
+        }
+        int next_dest_x = rect.x + MOVING_DIRS.at(moving_dir).x * cell_size.x;
+        int next_dest_y = rect.y + MOVING_DIRS.at(moving_dir).y * cell_size.y;
+        SDL_Point cell_idx = {next_dest_x / cell_size.x, next_dest_y / cell_size.y};
+        if (object_positions[cell_idx.y][cell_idx.x] == Define::CELL_TYPE::WALL) {
+            moving_dir = Define::DIRECTION::NONE;
+            return Define::SUCCESS;
+        }
+        while (object_positions[cell_idx.y + MOVING_DIRS.at(moving_dir).y][cell_idx.x + MOVING_DIRS.at(moving_dir).x] != Define::CELL_TYPE::WALL) {
+            next_dest_x += MOVING_DIRS.at(moving_dir).x * cell_size.x;
+            next_dest_y += MOVING_DIRS.at(moving_dir).y * cell_size.y;
+            cell_idx = {next_dest_x / cell_size.x, next_dest_y / cell_size.y};
         }
         dest = {next_dest_x, next_dest_y};
     }

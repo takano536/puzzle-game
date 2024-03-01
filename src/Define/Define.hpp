@@ -44,6 +44,7 @@ class Define final {
         FLOOR,
         WALL,
         START,
+        GOAL,
         HOLE,
     };
 };

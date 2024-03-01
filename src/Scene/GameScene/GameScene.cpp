@@ -4,25 +4,32 @@
 
 #include "../../Define/Define.hpp"
 #include "../../InputMonitor/InputMonitor.hpp"
+#include "../../PuzzleSolver/IceFloorPuzzleSolver/IceFloorPuzzleSolver.hpp"
+#include "../../PuzzleSolver/SynchronizedPuzzleSolver/SynchronizedPuzzleSolver.hpp"
 #include "../SceneType.hpp"
 
 const std::string GameScene::PARAM_KEY_LEVEL = "PARAM_KEY_LEVEL";
 
-const std::string GameScene::INNER_MARKS = ".......oo#";
-const std::string GameScene::OUTER_MARKS = "ooooooooo#";
-const char GameScene::START_MARK = 'P';
-const int GameScene::START_NUM = 2;
-
-const int GameScene::THRESHOLD = 5;
-const SDL_Point GameScene::PUZZLE_SIZE = {10, 10};
 const std::map<Define::CELL_TYPE, char> GameScene::CELL_MARKS = {
     {Define::CELL_TYPE::FLOOR, '.'},
     {Define::CELL_TYPE::WALL, '#'},
     {Define::CELL_TYPE::START, 'P'},
+    {Define::CELL_TYPE::GOAL, 'G'},
     {Define::CELL_TYPE::HOLE, 'o'},
 };
 
-const int GameScene::PLAYER_SPEED = 3;
+const std::string GameScene::INNER_MARKS =
+    std::string(4, CELL_MARKS.at(Define::CELL_TYPE::FLOOR)) +
+    std::string(1, CELL_MARKS.at(Define::CELL_TYPE::WALL));
+const std::string GameScene::OUTER_MARKS =
+    std::string(1, CELL_MARKS.at(Define::CELL_TYPE::WALL));
+
+const int GameScene::START_NUM = 1;
+
+const int GameScene::THRESHOLD = 10;
+const SDL_Point GameScene::PUZZLE_SIZE = {10, 10};
+
+const int GameScene::PLAYER_SPEED = 5;
 
 const std::map<Define::DIRECTION, int> GameScene::MARGIN = {
     {Define::DIRECTION::UP, 25},
@@ -40,15 +47,22 @@ GameScene::GameScene(IOnChangedListener *listener, const Parameter &params)
     : AbstractScene(listener, params),
       floors(std::make_unique<FloorManager>()),
       holes(std::make_unique<HoleManager>()),
-      players(std::make_unique<PlayerManager>()),
+      players(std::make_unique<PlayerManager>(true)),
       walls(std::make_unique<WallManager>()),
       puzzle_generator(nullptr),
       puzzle_solver(nullptr) {
 
     level = params.get(PARAM_KEY_LEVEL);
 
-    puzzle_generator = std::make_unique<PuzzleGenerator>(PUZZLE_SIZE, INNER_MARKS, OUTER_MARKS, START_MARK, START_NUM);
-    puzzle_solver = std::make_unique<PuzzleSolver>(CELL_MARKS);
+    puzzle_generator = std::make_unique<PuzzleGenerator>(
+        PUZZLE_SIZE,
+        INNER_MARKS,
+        OUTER_MARKS,
+        GameScene::CELL_MARKS.at(Define::CELL_TYPE::START),
+        START_NUM
+    );
+    puzzle_solver = std::make_unique<IceFloorPuzzleSolver>();
+    puzzle_solver->init(GameScene::CELL_MARKS);
 
     while (puzzle_solver->get_rate() < THRESHOLD) {
         puzzle_solver->reset();
@@ -84,10 +98,10 @@ GameScene::GameScene(IOnChangedListener *listener, const Parameter &params)
             SDL_Point size = {cell_size, cell_size};
             floors->add(coord, size, floor_colors[(i + j) % 2]);
             if (this->puzzle[i][j] == CELL_MARKS.at(Define::CELL_TYPE::WALL)) {
-                walls->add(SDL_Point(coord.x + padding, coord.y + padding), SDL_Point(size.x - padding * 2, size.y - padding * 2), Define::BLACK);
+                walls->add(SDL_Point(coord.x + padding, coord.y + padding), SDL_Point(size.x - padding * 2 - 1, size.y - padding * 2 - 1), Define::BLACK);
             }
             if (this->puzzle[i][j] == CELL_MARKS.at(Define::CELL_TYPE::HOLE)) {
-                holes->add(SDL_Point(coord.x + padding, coord.y + padding), SDL_Point(size.x - padding * 2, size.y - padding * 2), Define::WHITE);
+                holes->add(SDL_Point(coord.x + padding, coord.y + padding), SDL_Point(size.x - padding * 2 - 1, size.y - padding * 2 - 1), Define::WHITE);
             }
             if (this->puzzle[i][j] == CELL_MARKS.at(Define::CELL_TYPE::START)) {
                 players->add(coord, size, size, Define::RED, PLAYER_SPEED);
