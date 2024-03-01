@@ -138,6 +138,7 @@ void SynchronizedPuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> i
     }
 
     this->step = min_dist;
+    this->goal_coord = id2coords(goal_id, player_num).back();
     for (const auto &c : pathes[goal_id]) {
         this->ans.push_back(std::ranges::find_if(DIR_CHARS, [c](const auto &dir) { return dir.second == c; })->first);
     }
@@ -177,4 +178,12 @@ std::vector<Define::DIRECTION> SynchronizedPuzzleSolver::get_ans() const {
  */
 int SynchronizedPuzzleSolver::get_rate() const {
     return step;
+}
+
+/**
+ * @brief ゴールの座標を取得する
+ * @return ゴールの座標
+ */
+SDL_Point SynchronizedPuzzleSolver::get_goal() const {
+    return goal_coord;
 }

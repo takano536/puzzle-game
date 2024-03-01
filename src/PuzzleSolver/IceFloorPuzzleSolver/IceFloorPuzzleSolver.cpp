@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <complex>
+#include <iostream>
 #include <limits>
 #include <queue>
 #include <utility>
@@ -41,7 +42,9 @@ void IceFloorPuzzleSolver::init(const std::map<Define::CELL_TYPE, char> &marks) 
 void IceFloorPuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input) {
     this->puzzle = std::move(input);
 
-    std::pair<int, int> size = {static_cast<int>((*this->puzzle)[0].size()), static_cast<int>(this->puzzle->size())};
+    std::pair<int, int> size = {static_cast<int>(this->puzzle->size()), static_cast<int>((*this->puzzle)[0].size())};
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Start of BFS");
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "size: %d, %d", size.first, size.second);
 
     std::pair<int, int> start;
     for (int i = 0; i < size.first; i++) {
@@ -52,14 +55,16 @@ void IceFloorPuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input
         }
     }
 
-    std::vector<std::vector<int>> dist(size.first, std::vector<int>(size.second, -1));
+    std::vector<std::vector<int>> steps(size.first, std::vector<int>(size.second, NaN));
+    std::vector<std::vector<int>> dists(size.first, std::vector<int>(size.second, INF));
     std::queue<std::pair<std::pair<int, int>, std::string>> que;
     std::map<std::pair<int, int>, std::string> pathes;
-    dist[start.first][start.second] = 0;
+    steps[start.first][start.second] = 0;
+    dists[start.first][start.second] = 0;
     pathes[start] = "";
     que.push({start, pathes[start]});
 
-    auto move = [this, &size](const std::pair<int, int> &coord, const std::pair<int, int> &dir) -> std::pair<int, int> {
+    auto move = [this, &size, &dists](const std::pair<int, int> &coord, const std::pair<int, int> &dir, const int step) -> std::pair<int, int> {
         auto next_coord = std::pair<int, int>(coord.first + dir.first, coord.second + dir.second);
         if (next_coord.first < 0 || next_coord.first >= size.first || next_coord.second < 0 || next_coord.second >= size.second) {
             return coord;
@@ -67,6 +72,8 @@ void IceFloorPuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input
         if ((*this->puzzle)[next_coord.first][next_coord.second] == marks.at(Define::CELL_TYPE::WALL)) {
             return coord;
         }
+        auto curr_dist = step;
+        dists[next_coord.first][next_coord.second] = std::min(dists[next_coord.first][next_coord.second], curr_dist++);
         while (true) {
             int next_h = next_coord.first + dir.first;
             int next_w = next_coord.second + dir.second;
@@ -78,35 +85,43 @@ void IceFloorPuzzleSolver::solve(std::unique_ptr<std::vector<std::string>> input
             }
             next_coord.first = next_h;
             next_coord.second = next_w;
+            dists[next_coord.first][next_coord.second] = std::min(dists[next_coord.first][next_coord.second], curr_dist++);
         }
         return next_coord;
     };
 
-    int max_dist = 0;
-    std::pair<int, int> goal;
     while (!que.empty()) {
         const auto [curr, path] = que.front();
         que.pop();
 
         for (const auto &[dir, dir_vec] : DIR_VECS) {
-            const auto next = move(curr, dir_vec);
-            if (dist[next.first][next.second] != -1) {
+            const auto next = move(curr, dir_vec, steps[curr.first][curr.second]);
+            if (steps[next.first][next.second] != NaN) {
                 continue;
             }
-            dist[next.first][next.second] = dist[curr.first][curr.second] + 1;
+            steps[next.first][next.second] = steps[curr.first][curr.second] + 1;
             pathes[next] = path + DIR_CHARS.at(dir);
             que.push({next, pathes[next]});
-            if (max_dist < dist[next.first][next.second]) {
-                max_dist = dist[next.first][next.second];
-                goal = next;
+        }
+    }
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "End of BFS");
+
+    int max_dists = 0;
+    for (int i = 0; i < size.first; i++) {
+        for (int j = 0; j < size.second; j++) {
+            if (dists[i][j] == INF) {
+                continue;
+            }
+            if (dists[i][j] > max_dists) {
+                max_dists = dists[i][j];
+                goal_coord = {j, i};
             }
         }
     }
-
-    this->step = max_dist;
-    for (const auto &c : pathes[goal]) {
+    for (const auto &c : pathes[std::make_pair(goal_coord.y, goal_coord.x)]) {
         this->ans.push_back(std::ranges::find_if(DIR_CHARS, [c](const auto &dir) { return dir.second == c; })->first);
     }
+    step = static_cast<int>(ans.size());
 }
 
 /**
@@ -143,4 +158,12 @@ std::vector<Define::DIRECTION> IceFloorPuzzleSolver::get_ans() const {
  */
 int IceFloorPuzzleSolver::get_rate() const {
     return step;
+}
+
+/**
+ * @brief ゴールの座標を取得する
+ * @return ゴールの座標
+ */
+SDL_Point IceFloorPuzzleSolver::get_goal() const {
+    return goal_coord;
 }

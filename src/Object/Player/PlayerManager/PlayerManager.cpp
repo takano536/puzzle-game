@@ -17,8 +17,8 @@ PlayerManager::PlayerManager(bool is_slip)
  * @param color プレイヤーの色
  * @param speed 移動速度
  */
-void PlayerManager::add(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color, int speed) {
-    players.push_back(std::make_unique<Player>(coord, player_size, cell_size, color, speed));
+void PlayerManager::add(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color) {
+    players.push_back(std::make_unique<Player>(coord, player_size, cell_size, color));
 }
 
 /**

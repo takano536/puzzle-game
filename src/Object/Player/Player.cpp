@@ -18,11 +18,13 @@ const std::map<Define::DIRECTION, SDL_Point> Player::MOVING_DIRS = {
     {Define::DIRECTION::DOWN, {0, 1}},
     {Define::DIRECTION::LEFT, {-1, 0}},
 };
+const int Player::ACCERELATION = 2;
+const int Player::VELOCITY = 5;
 
 /**
  * @brief プレイヤーのコンストラクタ
  */
-Player::Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color, int speed)
+Player::Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color)
     : rect({coord.x, coord.y, player_size.x, player_size.y}),
       init_coord(coord),
       prev_coord(coord),
@@ -30,7 +32,7 @@ Player::Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_P
       color(color),
       moving_dir(Define::DIRECTION::NONE),
       dest(coord),
-      speed(speed) {
+      frame_cnt(0) {
 }
 
 /**
@@ -112,8 +114,9 @@ int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<
     }
 
     prev_coord = {rect.x, rect.y};
-    rect.x += MOVING_DIRS.at(moving_dir).x * speed;
-    rect.y += MOVING_DIRS.at(moving_dir).y * speed;
+    rect.x += MOVING_DIRS.at(moving_dir).x * (VELOCITY + ACCERELATION * frame_cnt);
+    rect.y += MOVING_DIRS.at(moving_dir).y * (VELOCITY + ACCERELATION * frame_cnt);
+    frame_cnt++;
 
     switch (moving_dir) {
         case Define::DIRECTION::UP:
@@ -121,6 +124,7 @@ int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<
                 rect.y = dest.y;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         case Define::DIRECTION::RIGHT:
@@ -128,6 +132,7 @@ int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<
                 rect.x = dest.x;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         case Define::DIRECTION::DOWN:
@@ -135,6 +140,7 @@ int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<
                 rect.y = dest.y;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         case Define::DIRECTION::LEFT:
@@ -142,6 +148,7 @@ int Player::move(const bool are_stopped_everyone, const std::vector<std::vector<
                 rect.x = dest.x;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         default:
@@ -187,8 +194,9 @@ int Player::move_on_ice(const bool are_stopped_everyone, const std::vector<std::
     }
 
     prev_coord = {rect.x, rect.y};
-    rect.x += MOVING_DIRS.at(moving_dir).x * speed;
-    rect.y += MOVING_DIRS.at(moving_dir).y * speed;
+    rect.x += MOVING_DIRS.at(moving_dir).x * (VELOCITY + ACCERELATION * frame_cnt);
+    rect.y += MOVING_DIRS.at(moving_dir).y * (VELOCITY + ACCERELATION * frame_cnt);
+    frame_cnt++;
 
     switch (moving_dir) {
         case Define::DIRECTION::UP:
@@ -196,6 +204,7 @@ int Player::move_on_ice(const bool are_stopped_everyone, const std::vector<std::
                 rect.y = dest.y;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         case Define::DIRECTION::RIGHT:
@@ -203,6 +212,7 @@ int Player::move_on_ice(const bool are_stopped_everyone, const std::vector<std::
                 rect.x = dest.x;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         case Define::DIRECTION::DOWN:
@@ -210,6 +220,7 @@ int Player::move_on_ice(const bool are_stopped_everyone, const std::vector<std::
                 rect.y = dest.y;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         case Define::DIRECTION::LEFT:
@@ -217,6 +228,7 @@ int Player::move_on_ice(const bool are_stopped_everyone, const std::vector<std::
                 rect.x = dest.x;
                 moving_dir = Define::DIRECTION::NONE;
                 prev_coord = dest;
+                frame_cnt = 0;
             }
             break;
         default:

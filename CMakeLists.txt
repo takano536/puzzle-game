@@ -25,13 +25,12 @@ add_executable(
     src/InputMonitor/InputMonitor.cpp
     src/Looper/Looper.cpp
     src/Object/Floor/Floor.cpp
-    src/Object/Floor/FloorManager/FloorManager.cpp
+    src/Object/Goal/Goal.cpp
     src/Object/Hole/Hole.cpp
-    src/Object/Hole/HoleManager/HoleManager.cpp
+    src/Object/ObjectManager/ObjectManager.cpp
     src/Object/Player/Player.cpp
     src/Object/Player/PlayerManager/PlayerManager.cpp
     src/Object/Wall/Wall.cpp
-    src/Object/Wall/WallManager/WallManager.cpp
     src/PuzzleGenerator/PuzzleGenerator.cpp
     src/PuzzleSolver/IceFloorPuzzleSolver/IceFloorPuzzleSolver.cpp
     src/PuzzleSolver/SynchronizedPuzzleSolver/SynchronizedPuzzleSolver.cpp

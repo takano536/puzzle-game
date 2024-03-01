@@ -20,4 +20,5 @@ class PuzzleSolver {
     virtual std::unique_ptr<std::vector<std::string>> get_puzzle() const = 0;
     virtual std::vector<Define::DIRECTION> get_ans() const = 0;
     virtual int get_rate() const = 0;
+    virtual SDL_Point get_goal() const = 0;
 };

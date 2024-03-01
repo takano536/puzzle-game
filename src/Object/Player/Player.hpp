@@ -18,7 +18,7 @@
  */
 class Player : public Object {
   public:
-    Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color, int speed);
+    Player(const SDL_Point &coord, const SDL_Point &player_size, const SDL_Point &cell_size, const SDL_Color &color);
     virtual ~Player() = default;
     void update() override;
     int update(const bool are_stopped_everyone, const bool is_slip, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);
@@ -30,6 +30,8 @@ class Player : public Object {
   private:
     static const std::map<Define::DIRECTION, std::vector<SDL_KeyCode>> KEY_MAPS;
     static const std::map<Define::DIRECTION, SDL_Point> MOVING_DIRS;
+    static const int ACCERELATION;
+    static const int VELOCITY;
 
     SDL_Rect rect;
     SDL_Point init_coord;
@@ -38,7 +40,7 @@ class Player : public Object {
     SDL_Color color;
     Define::DIRECTION moving_dir;
     SDL_Point dest;
-    int speed;
+    int frame_cnt;
 
     int move(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);
     int move_on_ice(const bool are_stopped_everyone, const std::vector<std::vector<Define::CELL_TYPE>> &object_positions);

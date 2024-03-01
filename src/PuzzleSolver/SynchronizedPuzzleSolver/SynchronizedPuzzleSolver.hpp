@@ -20,6 +20,7 @@ class SynchronizedPuzzleSolver : public PuzzleSolver {
     std::unique_ptr<std::vector<std::string>> get_puzzle() const override;
     std::vector<Define::DIRECTION> get_ans() const override;
     int get_rate() const override;
+    SDL_Point get_goal() const override;
 
   private:
     static const int INF;
@@ -31,4 +32,5 @@ class SynchronizedPuzzleSolver : public PuzzleSolver {
     std::map<Define::CELL_TYPE, char> marks;
     std::vector<Define::DIRECTION> ans;
     int step;
+    SDL_Point goal_coord;
 };

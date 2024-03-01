@@ -6,10 +6,8 @@
 #include <memory>
 #include <string>
 
-#include "../../Object/Floor/FloorManager/FloorManager.hpp"
-#include "../../Object/Hole/HoleManager/HoleManager.hpp"
+#include "../../Object/ObjectManager/ObjectManager.hpp"
 #include "../../Object/Player/PlayerManager/PlayerManager.hpp"
-#include "../../Object/Wall/WallManager/WallManager.hpp"
 #include "../../PuzzleGenerator/PuzzleGenerator.hpp"
 #include "../../PuzzleSolver/PuzzleSolver.hpp"
 #include "../AbstractScene/AbstractScene.hpp"
@@ -25,7 +23,10 @@ class GameScene : public AbstractScene {
     void draw(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Texture *texture, TTF_Font *font) const override;
 
     static const std::string PARAM_KEY_LEVEL;
+    static const std::string PARAM_KEY_PUZZLE;
+
     static const std::map<Define::CELL_TYPE, char> CELL_MARKS;
+    static const std::map<Define::CELL_TYPE, SDL_Color> OBJECT_COLORS;
 
   private:
     static const std::string INNER_MARKS;
@@ -36,16 +37,12 @@ class GameScene : public AbstractScene {
     static const int THRESHOLD;
     static const SDL_Point PUZZLE_SIZE;
 
-    static const int PLAYER_SPEED;
-
     static const std::map<Define::DIRECTION, int> MARGIN;
 
     int level;
 
-    std::unique_ptr<FloorManager> floors;
-    std::unique_ptr<HoleManager> holes;
+    std::unique_ptr<ObjectManager> objects;
     std::unique_ptr<PlayerManager> players;
-    std::unique_ptr<WallManager> walls;
 
     std::unique_ptr<PuzzleGenerator> puzzle_generator;
     std::unique_ptr<PuzzleSolver> puzzle_solver;
